@@ -1,0 +1,27 @@
+{
+  "name": "emoji-industries",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://ian97531@github.com/ian97531/emoji-industries.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ian97531/emoji-industries/issues"
+  },
+  "homepage": "https://github.com/ian97531/emoji-industries#readme",
+  "dependencies": {
+    "next": "^9.1.6",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0"
+  }
+}
