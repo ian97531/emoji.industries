@@ -7,6 +7,8 @@ import Box from "@material-ui/core/Box";
 
 import Header from "../components/Header";
 
+import emojis from "../data/emoji.json";
+
 import { fontColor } from "../constants";
 
 const useStyles = makeStyles({
@@ -28,13 +30,15 @@ const useStyles = makeStyles({
     display: "flex",
     flexDirection: "row",
     flexWrap: "wrap",
-    marginLeft: "-15px",
-    marginRight: "-17px"
+    marginLeft: "-5px",
+    marginRight: "-43px"
   },
   emoji: {
-    fontSize: "110px",
-    paddingLeft: "10px",
-    paddingRight: "11.5px"
+    fontSize: "120px",
+    width: "calc(100% / 6)",
+    minWidth: "140px",
+    textAlign: "left",
+    cursor: "pointer"
   }
 });
 
@@ -53,175 +57,15 @@ export default function Index() {
           Smileys & People
         </Typography>
         <Box className={classes.emojiBox}>
-          <Typography className={classes.emoji}>😀</Typography>
-          <Typography className={classes.emoji}>😃</Typography>
-          <Typography className={classes.emoji}>😄</Typography>
-          <Typography className={classes.emoji}>😁</Typography>
-          <Typography className={classes.emoji}>😆</Typography>
-          <Typography className={classes.emoji}>😅</Typography>
-          <Typography className={classes.emoji}>😂</Typography>
-          <Typography className={classes.emoji}>🤣</Typography>
-          <Typography className={classes.emoji}>😊</Typography>
-          <Typography className={classes.emoji}>😇</Typography>
-          <Typography className={classes.emoji}>🙂</Typography>
-          <Typography className={classes.emoji}>🙃</Typography>
-          <Typography className={classes.emoji}>😉</Typography>
-          <Typography className={classes.emoji}>😌</Typography>
-          <Typography className={classes.emoji}>😍</Typography>
-          <Typography className={classes.emoji}>🥰</Typography>
-          <Typography className={classes.emoji}>😘</Typography>
-          <Typography className={classes.emoji}>😗</Typography>
-          <Typography className={classes.emoji}>😙</Typography>
-          <Typography className={classes.emoji}>😚</Typography>
-          <Typography className={classes.emoji}>😋</Typography>
-          <Typography className={classes.emoji}>😛</Typography>
-          <Typography className={classes.emoji}>😝</Typography>
-          <Typography className={classes.emoji}>😜</Typography>
-          <Typography className={classes.emoji}>🤪</Typography>
-          <Typography className={classes.emoji}>🤨</Typography>
-          <Typography className={classes.emoji}>🧐</Typography>
-          <Typography className={classes.emoji}>🤓</Typography>
-          <Typography className={classes.emoji}>😎</Typography>
-          <Typography className={classes.emoji}>🤩</Typography>
-          <Typography className={classes.emoji}>🥳</Typography>
-          <Typography className={classes.emoji}>😏</Typography>
-          <Typography className={classes.emoji}>😒</Typography>
-          <Typography className={classes.emoji}>😞</Typography>
-          <Typography className={classes.emoji}>😔</Typography>
-          <Typography className={classes.emoji}>😟</Typography>
-          <Typography className={classes.emoji}>😕</Typography>
-          <Typography className={classes.emoji}>🙁</Typography>
-          <Typography className={classes.emoji}>😣</Typography>
-          <Typography className={classes.emoji}>😖</Typography>
-          <Typography className={classes.emoji}>😫</Typography>
-          <Typography className={classes.emoji}>😩</Typography>
-          <Typography className={classes.emoji}>🥺</Typography>
-          <Typography className={classes.emoji}>😢</Typography>
-          <Typography className={classes.emoji}>😭</Typography>
-          <Typography className={classes.emoji}>😤</Typography>
-          <Typography className={classes.emoji}>😠</Typography>
-          <Typography className={classes.emoji}>😡</Typography>
-          <Typography className={classes.emoji}>🤬</Typography>
-          <Typography className={classes.emoji}>🤯</Typography>
-          <Typography className={classes.emoji}>😳</Typography>
-          <Typography className={classes.emoji}>🥵</Typography>
-          <Typography className={classes.emoji}>🥶</Typography>
-          <Typography className={classes.emoji}>😱</Typography>
-          <Typography className={classes.emoji}>😨</Typography>
-          <Typography className={classes.emoji}>😰</Typography>
-          <Typography className={classes.emoji}>😥</Typography>
-          <Typography className={classes.emoji}>😓</Typography>
-          <Typography className={classes.emoji}>🤗</Typography>
-          <Typography className={classes.emoji}>🤔</Typography>
-          <Typography className={classes.emoji}>🤭</Typography>
-          <Typography className={classes.emoji}>🤫</Typography>
-          <Typography className={classes.emoji}>🤥</Typography>
-          <Typography className={classes.emoji}>😶</Typography>
-          <Typography className={classes.emoji}>😐</Typography>
-          <Typography className={classes.emoji}>😑</Typography>
-          <Typography className={classes.emoji}>😬</Typography>
-          <Typography className={classes.emoji}>🙄</Typography>
-          <Typography className={classes.emoji}>😯</Typography>
-          <Typography className={classes.emoji}>😦</Typography>
-          <Typography className={classes.emoji}>😧</Typography>
-          <Typography className={classes.emoji}>😮</Typography>
-          <Typography className={classes.emoji}>😲</Typography>
-          <Typography className={classes.emoji}>🥱</Typography>
-          <Typography className={classes.emoji}>😴</Typography>
-          <Typography className={classes.emoji}>🤤</Typography>
-          <Typography className={classes.emoji}>😪</Typography>
-          <Typography className={classes.emoji}>😵</Typography>
-          <Typography className={classes.emoji}>🤐</Typography>
-          <Typography className={classes.emoji}>🥴</Typography>
-          <Typography className={classes.emoji}>🤢</Typography>
-          <Typography className={classes.emoji}>🤮</Typography>
-          <Typography className={classes.emoji}>🤧</Typography>
-          <Typography className={classes.emoji}>😷</Typography>
-          <Typography className={classes.emoji}>🤒</Typography>
-          <Typography className={classes.emoji}>🤕</Typography>
-          <Typography className={classes.emoji}>🤑</Typography>
-          <Typography className={classes.emoji}>🤠</Typography>
-          <Typography className={classes.emoji}>😈</Typography>
-          <Typography className={classes.emoji}>👿</Typography>
-          <Typography className={classes.emoji}>👹</Typography>
-          <Typography className={classes.emoji}>👺</Typography>
-          <Typography className={classes.emoji}>🤡</Typography>
-          <Typography className={classes.emoji}>💩</Typography>
-          <Typography className={classes.emoji}>👻</Typography>
-          <Typography className={classes.emoji}>💀</Typography>
-          <Typography className={classes.emoji}>☠️</Typography>
-          <Typography className={classes.emoji}>👽</Typography>
-          <Typography className={classes.emoji}>👾</Typography>
-          <Typography className={classes.emoji}>🤖</Typography>
-          <Typography className={classes.emoji}>🎃</Typography>
-          <Typography className={classes.emoji}>😺</Typography>
-          <Typography className={classes.emoji}>😸</Typography>
-          <Typography className={classes.emoji}>😹</Typography>
-          <Typography className={classes.emoji}>😻</Typography>
-          <Typography className={classes.emoji}>😼</Typography>
-          <Typography className={classes.emoji}>😽</Typography>
-          <Typography className={classes.emoji}>🙀</Typography>
-          <Typography className={classes.emoji}>😿</Typography>
-          <Typography className={classes.emoji}>😾</Typography>
-          <Typography className={classes.emoji}>🤲</Typography>
-          <Typography className={classes.emoji}>👐</Typography>
-          <Typography className={classes.emoji}>👏</Typography>
-          <Typography className={classes.emoji}>🤝</Typography>
-          <Typography className={classes.emoji}>👍</Typography>
-          <Typography className={classes.emoji}>👎</Typography>
-          <Typography className={classes.emoji}>👊</Typography>
-          <Typography className={classes.emoji}>✊</Typography>
-          <Typography className={classes.emoji}>🤛</Typography>
-          <Typography className={classes.emoji}>🤜</Typography>
-          <Typography className={classes.emoji}>🤞</Typography>
-          <Typography className={classes.emoji}>🤟</Typography>
-          <Typography className={classes.emoji}>🤘</Typography>
-          <Typography className={classes.emoji}>👌</Typography>
-          <Typography className={classes.emoji}>🤏</Typography>
-          <Typography className={classes.emoji}>👈</Typography>
-          <Typography className={classes.emoji}>👉</Typography>
-          <Typography className={classes.emoji}>👆</Typography>
-          <Typography className={classes.emoji}>👇</Typography>
-          <Typography className={classes.emoji}>
-            &#x1F477;&#x1F3FB;&#x200D;&#x2640;&#xFE0F;
-          </Typography>
-          <Typography className={classes.emoji}></Typography>
-          <Typography className={classes.emoji}></Typography>
-          <Typography className={classes.emoji}></Typography>
-          <Typography className={classes.emoji}></Typography>
-          <Typography className={classes.emoji}></Typography>
-          <Typography className={classes.emoji}></Typography>
-          <Typography className={classes.emoji}></Typography>
-          <Typography className={classes.emoji}></Typography>
-          <Typography className={classes.emoji}></Typography>
-          <Typography className={classes.emoji}></Typography>
-          <Typography className={classes.emoji}></Typography>
-          <Typography className={classes.emoji}></Typography>
-          <Typography className={classes.emoji}></Typography>
-          <Typography className={classes.emoji}></Typography>
-          <Typography className={classes.emoji}></Typography>
-          <Typography className={classes.emoji}></Typography>
-          <Typography className={classes.emoji}></Typography>
-          <Typography className={classes.emoji}></Typography>
-          <Typography className={classes.emoji}></Typography>
-          <Typography className={classes.emoji}></Typography>
-          <Typography className={classes.emoji}></Typography>
-          <Typography className={classes.emoji}></Typography>
-          <Typography className={classes.emoji}></Typography>
-          <Typography className={classes.emoji}></Typography>
-          <Typography className={classes.emoji}></Typography>
-          <Typography className={classes.emoji}></Typography>
-          <Typography className={classes.emoji}></Typography>
-          <Typography className={classes.emoji}></Typography>
-          <Typography className={classes.emoji}></Typography>
-          <Typography className={classes.emoji}></Typography>
-          <Typography className={classes.emoji}></Typography>
-          <Typography className={classes.emoji}></Typography>
-          <Typography className={classes.emoji}></Typography>
-          <Typography className={classes.emoji}></Typography>
-          <Typography className={classes.emoji}></Typography>
-          <Typography className={classes.emoji}></Typography>
-          <Typography className={classes.emoji}></Typography>
+          {Object.entries(emojis).map(([unicode, emoji]) => (
+            <Typography
+              key={unicode}
+              className={classes.emoji}
+              title={emoji.name}
+            >
+              {String.fromCodePoint(...emoji.codepoints)}
+            </Typography>
+          ))}
         </Box>
       </Container>
       <Container maxWidth="md" className={classes.container}>
