@@ -1,9 +1,11 @@
 import React from "react";
 import App from "next/app";
 import Head from "next/head";
+import Router from "next/router";
 import { ThemeProvider } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import theme from "../theme";
+import { initGA, logException, logPageView } from "../utils/analytics";
 
 export default class MyApp extends App {
   componentDidMount() {
@@ -12,6 +14,18 @@ export default class MyApp extends App {
     if (jssStyles && jssStyles.parentElement) {
       jssStyles.parentElement.removeChild(jssStyles);
     }
+    initGA();
+    logPageView();
+
+    Router.events.on("routeChangeComplete", this.logChangeRoute);
+  }
+
+  componentWillUnmount() {
+    Router.events.off("routeChangeComplete", this.logChangeRoute);
+  }
+
+  private logChangeRoute(url: string) {
+    logPageView(url);
   }
 
   render() {
