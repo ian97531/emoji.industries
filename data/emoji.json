@@ -31,6 +31,7 @@
   },
   "U+1F923": {
     "codepoints": [129315],
+    "category": "Smileys & People",
     "name": "Rolling on the Floor Laughing"
   },
   "U+1F602": {
@@ -278,7 +279,11 @@
     "category": "Smileys & People",
     "name": "Dizzy Face"
   },
-  "U+1F92F": { "codepoints": [129327], "name": "Exploding Head" },
+  "U+1F92F": {
+    "codepoints": [129327],
+    "category": "Smileys & People",
+    "name": "Exploding Head"
+  },
   "U+1F920": {
     "codepoints": [129312],
     "category": "Smileys & People",
@@ -2666,46 +2671,64 @@
     "category": "Smileys & People",
     "name": "Older Person: Dark Skin Tone"
   },
-  "U+1F474": { "codepoints": [128116], "name": "Old Man" },
+  "U+1F474": {
+    "codepoints": [128116],
+    "category": "Smileys & People",
+    "name": "Old Man"
+  },
   "U+1F474U+1F3FB": {
     "codepoints": [128116, 127995],
+    "category": "Smileys & People",
     "name": "Old Man: Light Skin Tone"
   },
   "U+1F474U+1F3FC": {
     "codepoints": [128116, 127996],
+    "category": "Smileys & People",
     "name": "Old Man: Medium-Light Skin Tone"
   },
   "U+1F474U+1F3FD": {
     "codepoints": [128116, 127997],
+    "category": "Smileys & People",
     "name": "Old Man: Medium Skin Tone"
   },
   "U+1F474U+1F3FE": {
     "codepoints": [128116, 127998],
+    "category": "Smileys & People",
     "name": "Old Man: Medium-Dark Skin Tone"
   },
   "U+1F474U+1F3FF": {
     "codepoints": [128116, 127999],
+    "category": "Smileys & People",
     "name": "Old Man: Dark Skin Tone"
   },
-  "U+1F475": { "codepoints": [128117], "name": "Old Woman" },
+  "U+1F475": {
+    "codepoints": [128117],
+    "category": "Smileys & People",
+    "name": "Old Woman"
+  },
   "U+1F475U+1F3FB": {
     "codepoints": [128117, 127995],
+    "category": "Smileys & People",
     "name": "Old Woman: Light Skin Tone"
   },
   "U+1F475U+1F3FC": {
     "codepoints": [128117, 127996],
+    "category": "Smileys & People",
     "name": "Old Woman: Medium-Light Skin Tone"
   },
   "U+1F475U+1F3FD": {
     "codepoints": [128117, 127997],
+    "category": "Smileys & People",
     "name": "Old Woman: Medium Skin Tone"
   },
   "U+1F475U+1F3FE": {
     "codepoints": [128117, 127998],
+    "category": "Smileys & People",
     "name": "Old Woman: Medium-Dark Skin Tone"
   },
   "U+1F475U+1F3FF": {
     "codepoints": [128117, 127999],
+    "category": "Smileys & People",
     "name": "Old Woman: Dark Skin Tone"
   },
   "U+1F64D": {
@@ -7388,17 +7411,24 @@
     "category": "Smileys & People",
     "name": "Man in Suit Levitating: Dark Skin Tone"
   },
-  "U+1F46F": { "codepoints": [128111], "name": "People With Bunny Ears" },
+  "U+1F46F": {
+    "codepoints": [128111],
+    "category": "Smileys & People",
+    "name": "People With Bunny Ears"
+  },
   "U+1F46FU+200DU+2642U+FE0F": {
     "codepoints": [128111, 8205, 9794, 65039],
+    "category": "Smileys & People",
     "name": "Men With Bunny Ears"
   },
   "U+1F46FU+200DU+2640U+FE0F": {
     "codepoints": [128111, 8205, 9792, 65039],
+    "category": "Smileys & People",
     "name": "Women With Bunny Ears"
   },
   "U+1F9D6": {
     "codepoints": [129494],
+    "category": "Smileys & People",
     "category": "Smileys & People",
     "name": "Person in Steamy Room"
   },
@@ -10834,11 +10864,24 @@
   },
   "U+1F93CU+1F3FDU+200DU+2642U+FE0F": {
     "codepoints": [129340, 127997, 8205, 9794, 65039],
+    "category": "Activity",
     "name": "Men Wrestling, Type-4"
   },
-  "U+1F36B": { "codepoints": [127851], "name": "Chocolate Bar" },
-  "U+1F36C": { "codepoints": [127852], "name": "Candy" },
-  "U+1F36D": { "codepoints": [127853], "name": "Lollipop" },
+  "U+1F36B": {
+    "codepoints": [127851],
+    "category": "Food & Drink",
+    "name": "Chocolate Bar"
+  },
+  "U+1F36C": {
+    "codepoints": [127852],
+    "category": "Food & Drink",
+    "name": "Candy"
+  },
+  "U+1F36D": {
+    "codepoints": [127853],
+    "category": "Food & Drink",
+    "name": "Lollipop"
+  },
   "U+1F93CU+1F3FEU+200DU+2642U+FE0F": {
     "codepoints": [129340, 127998, 8205, 9794, 65039],
     "category": "Activity",
@@ -11684,7 +11727,11 @@
     "category": "Travel & Places",
     "name": "Stopwatch"
   },
-  "U+23F2U+FE0F": { "codepoints": [9202, 65039], "name": "Timer Clock" },
+  "U+23F2U+FE0F": {
+    "codepoints": [9202, 65039],
+    "category": "Travel & Places",
+    "name": "Timer Clock"
+  },
   "U+1F570U+FE0F": {
     "codepoints": [128368, 65039],
     "category": "Travel & Places",
@@ -12440,7 +12487,11 @@
     "category": "Activities",
     "name": "Yarn"
   },
-  "U+1F453": { "codepoints": [128083], "name": "Glasses" },
+  "U+1F453": {
+    "codepoints": [128083],
+    "category": "Objects",
+    "name": "Glasses"
+  },
   "U+1F576U+FE0F": {
     "codepoints": [128374, 65039],
     "category": "Objects",
@@ -13895,7 +13946,11 @@
     "category": "Symbols",
     "name": "Eject Button"
   },
-  "U+1F3A6": { "codepoints": [127910], "name": "Cinema" },
+  "U+1F3A6": {
+    "codepoints": [127910],
+    "category": "Symbols",
+    "name": "Cinema"
+  },
   "U+1F505": {
     "codepoints": [128261],
     "category": "Symbols",
