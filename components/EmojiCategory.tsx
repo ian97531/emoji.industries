@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
@@ -45,16 +45,32 @@ const useStyles = makeStyles({
   },
   emoji: {
     borderRadius: "10px",
+    border: "1px solid transparent",
     cursor: "pointer",
     fontSize: "120px",
     height: `${selectionSize}px`,
     lineHeight: `${selectionSize}px`,
+    marginBottom: "8px",
     textAlign: "center",
     width: `${selectionSize}px`,
-    transition: "box-shadow 0.3s ease-in-out",
+    transition:
+      "transform 0.1s ease-in-out, box-shadow 0.1s ease-in-out, border 0.1s ease-in-out",
     boxShadow: "inset 0 0px 0px 0px #00000000, 0px 0px 0px 0px #00000008",
     "&:hover": {
-      boxShadow: "inset 0 0px 60px 10px #00000012, 0px 3px 10px 3px #00000008"
+      border: "1px solid #00000012"
+    },
+    "&:focus": {
+      border: "1px solid #00000008",
+      boxShadow: "inset 0 0px 60px 10px #00000012, 0px 3px 10px 3px #00000008",
+      outline: "none"
+    },
+    "&:active": {
+      boxShadow: "inset 0 0px 60px 10px #0000000B, 0px 0px 2px 0px #00000010",
+      transform: "scale(0.98)"
+    },
+    "&.active": {
+      boxShadow: "inset 0 0px 60px 10px #0000000B, 0px 0px 2px 0px #00000010",
+      transform: "scale(0.98)"
     }
   }
 });
@@ -63,17 +79,21 @@ export default function Header(props: ComponentProps) {
   const { category, emojis } = props;
   const classes = useStyles();
 
-  const onClickEmoji = (evt: React.MouseEvent) => {
+  const copyCodepoints = (codepointsStr: string) => {
+    const codepoints = codepointsStr
+      .split(",")
+      .map(codepoint => parseInt(codepoint, 10));
+    navigator.clipboard.writeText(String.fromCodePoint(...codepoints));
+  };
+
+  const onClickEmoji = useCallback((evt: React.MouseEvent) => {
     if (
-      evt.target instanceof HTMLParagraphElement &&
+      evt.target instanceof HTMLButtonElement &&
       evt.target.dataset.codepoints
     ) {
-      const codepoints = evt.target.dataset.codepoints
-        .split(",")
-        .map(codepoint => parseInt(codepoint, 10));
-      console.log(`click ${String.fromCodePoint(...codepoints)}`);
+      copyCodepoints(evt.target.dataset.codepoints);
     }
-  };
+  }, []);
 
   return (
     <Container maxWidth="md" className={classes.container}>
@@ -95,6 +115,7 @@ export default function Header(props: ComponentProps) {
             role="button"
             tabIndex={0}
             title={emoji.name}
+            component="button"
           >
             {String.fromCodePoint(...emoji.codepoints)}
           </Typography>
