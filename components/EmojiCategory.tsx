@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect } from "react";
+import Clipboard from "react-clipboard.js";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
@@ -44,6 +45,7 @@ const useStyles = makeStyles({
     justifyContent: "space-between"
   },
   emoji: {
+    background: "none",
     borderRadius: "10px",
     border: "1px solid transparent",
     cursor: "pointer",
@@ -54,7 +56,7 @@ const useStyles = makeStyles({
     textAlign: "center",
     width: `${selectionSize}px`,
     transition:
-      "transform 0.1s ease-in-out, box-shadow 0.1s ease-in-out, border 0.1s ease-in-out",
+      "transform 0.05s ease-in-out, box-shadow 0.05s ease-in-out, border 0.05s ease-in-out",
     boxShadow: "inset 0 0px 0px 0px #00000000, 0px 0px 0px 0px #00000008",
     "&:hover": {
       border: "1px solid #00000012"
@@ -79,19 +81,17 @@ export default function Header(props: ComponentProps) {
   const { category, emojis } = props;
   const classes = useStyles();
 
-  const copyCodepoints = (codepointsStr: string) => {
-    const codepoints = codepointsStr
-      .split(",")
-      .map(codepoint => parseInt(codepoint, 10));
-    navigator.clipboard.writeText(String.fromCodePoint(...codepoints));
-  };
+  // const copyCodepoints = (codepointsStr: string) => {
+  //   const codepoints = codepointsStr
+  //     .split(",")
+  //     .map(codepoint => parseInt(codepoint, 10));
+  //   debugger;
+  //   navigator.clipboard.writeText(String.fromCodePoint(...codepoints));
+  // };
 
   const onClickEmoji = useCallback((evt: React.MouseEvent) => {
-    if (
-      evt.target instanceof HTMLButtonElement &&
-      evt.target.dataset.codepoints
-    ) {
-      copyCodepoints(evt.target.dataset.codepoints);
+    if (evt.target instanceof HTMLButtonElement) {
+      evt.target.focus();
     }
   }, []);
 
@@ -107,18 +107,16 @@ export default function Header(props: ComponentProps) {
       </Typography>
       <Box className={classes.emojiBox}>
         {Object.entries(emojis).map(([unicode, emoji]) => (
-          <Typography
+          <Clipboard
+            component="button"
             className={classes.emoji}
-            data-codepoints={emoji.codepoints}
+            data-clipboard-text={String.fromCodePoint(...emoji.codepoints)}
             key={unicode}
             onClick={onClickEmoji}
-            role="button"
-            tabIndex={0}
             title={emoji.name}
-            component="button"
           >
             {String.fromCodePoint(...emoji.codepoints)}
-          </Typography>
+          </Clipboard>
         ))}
       </Box>
     </Container>
