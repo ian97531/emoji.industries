@@ -5,7 +5,7 @@ import Typography from "@material-ui/core/Typography";
 import Avatar from "@material-ui/core/Avatar";
 import Box from "@material-ui/core/Box";
 
-import EmojiCategory, { Emoji } from "../components/EmojiCategory";
+import EmojiSection from "../components/EmojiSection";
 import Header from "../components/Header";
 
 import categories from "../data/categories.json";
@@ -16,7 +16,7 @@ export default function Index() {
     <React.Fragment>
       <Header></Header>
       {Object.entries(categories).map(([name, ids]) => (
-        <EmojiCategory
+        <EmojiSection
           category={name}
           emojis={ids
             .map(id => emojis[id as keyof typeof emojis])

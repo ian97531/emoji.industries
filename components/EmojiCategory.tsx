@@ -77,17 +77,9 @@ const useStyles = makeStyles({
   }
 });
 
-export default function Header(props: ComponentProps) {
+export default function EmojiCategory(props: ComponentProps) {
   const { category, emojis } = props;
   const classes = useStyles();
-
-  // const copyCodepoints = (codepointsStr: string) => {
-  //   const codepoints = codepointsStr
-  //     .split(",")
-  //     .map(codepoint => parseInt(codepoint, 10));
-  //   debugger;
-  //   navigator.clipboard.writeText(String.fromCodePoint(...codepoints));
-  // };
 
   const onClickEmoji = useCallback((evt: React.MouseEvent) => {
     if (evt.target instanceof HTMLButtonElement) {
