@@ -2,7 +2,6 @@ function fallbackCopyTextToClipboard(text: string) {
   var textArea = document.createElement("textarea");
   textArea.value = text;
   textArea.style.position = "fixed";
-  textArea.style.display = "none";
   document.body.appendChild(textArea);
   textArea.focus();
   textArea.select();

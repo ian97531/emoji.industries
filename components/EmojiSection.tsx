@@ -40,6 +40,10 @@ const useStyles = makeStyles({
     paddingTop: "27px",
     width: "100%"
   },
+  emojiBox: {
+    marginLeft: "-27px",
+    marginRight: "-28px"
+  },
   display: {
     display: "flex",
     flexDirection: "row",
@@ -54,32 +58,151 @@ export default function EmojiSection(props: ComponentProps) {
   const classes = useStyles();
 
   const boxRef = useRef<HTMLDivElement>(null);
-  const [selectionLeft, setSelectionLeft] = useState(0);
-  const [selectionTop, setSelectionTop] = useState(0);
-  const [selectionWidth, setSelectionWidth] = useState(0);
-  const [selectionHeight, setSelectionHeight] = useState(0);
-  const [boxWidth, setBoxWidth] = useState(0);
-  const [selectionActive, setSelectionActive] = useState(false);
+  const [focusEmojiCodepoints, setFocusEmojiCodepoints] = useState("");
+  const [focusEmojiLeft, setFocusEmojiLeft] = useState(0);
+  const [focusEmojiTop, setFocusEmojiTop] = useState(0);
+  const [focusEmojiWidth, setFocusEmojiWidth] = useState(0);
+  const [focusEmojiHeight, setFocusEmojiHeight] = useState(0);
 
-  useEffect(() => {
+  const [activeEmojiCodepoints, setActiveEmojiCodepoints] = useState("");
+  const [mouseDown, setMouseDown] = useState(false);
+
+  const [boxWidth, setBoxWidth] = useState(0);
+
+  const updateBoxWidth = useCallback(() => {
     if (boxRef.current instanceof HTMLDivElement) {
       const { width } = boxRef.current.getBoundingClientRect();
-      setBoxWidth(width);
+      if (width !== boxWidth) {
+        setBoxWidth(width);
+      }
     }
-  });
+  }, [setBoxWidth]);
 
-  const setSelection = useCallback(
+  const copyActiveEmojiToClipboard = useCallback(() => {
+    const codepoints = activeEmojiCodepoints
+      ?.split(",")
+      .map(codepoint => parseInt(codepoint, 10));
+    if (codepoints && codepoints.length) {
+      copyTextToClipboard(String.fromCodePoint(...codepoints));
+    }
+  }, [activeEmojiCodepoints, copyTextToClipboard]);
+
+  const setFocusEmoji = useCallback(
     (evt: React.FocusEvent<HTMLButtonElement>) => {
       if (evt.target && evt.target instanceof HTMLButtonElement) {
         const { width, height } = evt.target.getBoundingClientRect();
-        setSelectionWidth(width);
-        setSelectionHeight(height);
-        setSelectionLeft(evt.target.offsetLeft);
-        setSelectionTop(evt.target.offsetTop);
+        setFocusEmojiWidth(width);
+        setFocusEmojiHeight(height);
+        setFocusEmojiLeft(evt.target.offsetLeft);
+        setFocusEmojiTop(evt.target.offsetTop);
+        setFocusEmojiCodepoints(evt.target.dataset.codepoints || "");
       }
     },
-    []
+    [
+      setFocusEmojiWidth,
+      setFocusEmojiHeight,
+      setFocusEmojiLeft,
+      setFocusEmojiTop,
+      setFocusEmojiCodepoints
+    ]
   );
+
+  const onKeyDown = useCallback(
+    (evt: React.KeyboardEvent) => {
+      if (
+        (evt.key === " " || evt.key === "Enter") &&
+        evt.target instanceof HTMLElement
+      ) {
+        setActiveEmojiCodepoints(evt.target.dataset.codepoints || "");
+        setMouseDown(true);
+      }
+    },
+    [setActiveEmojiCodepoints, setMouseDown]
+  );
+
+  const onKeyUp = useCallback(
+    (evt: React.KeyboardEvent) => {
+      if (
+        (evt.key === " " || evt.key === "Enter") &&
+        evt.target instanceof HTMLElement
+      ) {
+        copyActiveEmojiToClipboard();
+        setActiveEmojiCodepoints("");
+        evt.target.focus();
+        setMouseDown(false);
+      }
+    },
+    [setActiveEmojiCodepoints, copyActiveEmojiToClipboard, setMouseDown]
+  );
+
+  const onMouseDown = useCallback(
+    (evt: React.MouseEvent) => {
+      if (evt.target instanceof HTMLElement) {
+        setActiveEmojiCodepoints(evt.target.dataset.codepoints || "");
+      }
+      setMouseDown(true);
+    },
+    [setActiveEmojiCodepoints, setMouseDown]
+  );
+
+  const onMouseEnter = useCallback(
+    (evt: React.MouseEvent) => {
+      if (!mouseDown && evt.target && evt.target instanceof HTMLElement) {
+        evt.target.focus();
+      }
+    },
+    [mouseDown]
+  );
+
+  const onMouseLeave = useCallback(() => {
+    if (mouseDown) {
+      setActiveEmojiCodepoints("");
+    }
+  }, [mouseDown, setActiveEmojiCodepoints]);
+
+  const onMouseUp = useCallback(
+    (evt: MouseEvent) => {
+      setMouseDown(false);
+      if (evt.target instanceof HTMLElement) {
+        if (
+          activeEmojiCodepoints &&
+          activeEmojiCodepoints === focusEmojiCodepoints
+        ) {
+          copyActiveEmojiToClipboard();
+        }
+
+        if (evt.target.dataset.codepoints) {
+          evt.target.focus();
+        }
+      }
+
+      if (activeEmojiCodepoints) {
+        setActiveEmojiCodepoints("");
+      }
+    },
+    [
+      activeEmojiCodepoints,
+      setActiveEmojiCodepoints,
+      setMouseDown,
+      copyActiveEmojiToClipboard
+    ]
+  );
+
+  const onWindowResize = useCallback(() => {
+    updateBoxWidth();
+    setFocusEmojiWidth(0);
+    setFocusEmojiHeight(0);
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener("resize", onWindowResize);
+    document.addEventListener("mouseup", onMouseUp);
+    updateBoxWidth();
+    return () => {
+      window.removeEventListener("resize", onWindowResize),
+        document.removeEventListener("mouseup", onMouseUp);
+    };
+  });
 
   const displayEmojiEls = useMemo(
     () =>
@@ -87,53 +210,27 @@ export default function EmojiSection(props: ComponentProps) {
         <Emoji
           category={emoji.category}
           codepoints={emoji.codepoints}
+          data-codepoints={emoji.codepoints}
           key={emoji.name}
-          onKeyDown={(evt: React.KeyboardEvent) => {
-            if (evt.key === " " || evt.key === "Enter") {
-              setSelectionActive(true);
-            }
-          }}
-          onKeyUp={(evt: React.KeyboardEvent) => {
-            if (evt.key === " " || evt.key === "Enter") {
-              copyTextToClipboard(String.fromCodePoint(...emoji.codepoints));
-              setSelectionActive(false);
-              if (evt.target && evt.target instanceof HTMLElement) {
-                evt.target.focus();
-              }
-            }
-          }}
-          onMouseDown={() => {
-            setSelectionActive(true);
-          }}
-          onMouseEnter={(evt: React.MouseEvent) => {
-            if (
-              !selectionActive &&
-              evt.target &&
-              evt.target instanceof HTMLElement
-            ) {
-              evt.target.focus();
-            }
-          }}
-          onMouseLeave={() => {
-            if (selectionActive) {
-              setSelectionActive(false);
-            }
-          }}
-          onMouseUp={(evt: React.MouseEvent) => {
-            if (selectionActive) {
-              copyTextToClipboard(String.fromCodePoint(...emoji.codepoints));
-              setSelectionActive(false);
-              if (evt.target && evt.target instanceof HTMLElement) {
-                evt.target.focus();
-              }
-            }
-          }}
-          onFocus={setSelection}
+          onKeyDown={onKeyDown}
+          onKeyUp={onKeyUp}
+          onMouseDown={onMouseDown}
+          onMouseEnter={onMouseEnter}
+          onMouseLeave={onMouseLeave}
+          onFocus={setFocusEmoji}
           tabIndex={0}
           title={emoji.name}
         />
       )),
-    [emojis, selectionActive]
+    [
+      emojis,
+      onKeyDown,
+      onKeyUp,
+      onMouseDown,
+      onMouseEnter,
+      onMouseLeave,
+      setFocusEmoji
+    ]
   );
 
   const selectionEmojiEls = useMemo(() => {
@@ -158,13 +255,13 @@ export default function EmojiSection(props: ComponentProps) {
       >
         {category}
       </Typography>
-      <Box>
+      <Box className={classes.emojiBox}>
         <Selector
-          top={selectionTop}
-          left={selectionLeft}
-          width={selectionWidth}
-          height={selectionHeight}
-          selectionActive={selectionActive}
+          top={focusEmojiTop}
+          left={focusEmojiLeft}
+          width={focusEmojiWidth}
+          height={focusEmojiHeight}
+          selectionActive={mouseDown}
         >
           <div className={classes.display} style={{ width: boxWidth }}>
             {selectionEmojiEls}

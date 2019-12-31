@@ -60,7 +60,7 @@ const useStyles = makeStyles({
   }
 });
 
-export default function EmojiSection(props: ComponentProps) {
+export default function Selector(props: ComponentProps) {
   const { children, top, left, width, height, selectionActive } = props;
   const classes = useStyles();
 

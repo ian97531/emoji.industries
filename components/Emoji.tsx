@@ -10,6 +10,7 @@ export interface ComponentProps
 }
 
 const emojiSize = 165;
+const paddingTop = 10;
 
 const useStyles = makeStyles({
   emoji: {
@@ -18,10 +19,9 @@ const useStyles = makeStyles({
     border: "1px solid transparent",
     cursor: "pointer",
     fontSize: "120px",
-    height: `${emojiSize}px`,
-    lineHeight: `${emojiSize}px`,
+    height: `${emojiSize + paddingTop}px`,
     marginBottom: "8px",
-    overflow: "hidden",
+    paddingTop: `${paddingTop}px`,
     position: "relative",
     textAlign: "center",
     transformOrigin: "center",
