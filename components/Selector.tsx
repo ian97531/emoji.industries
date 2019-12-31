@@ -56,7 +56,7 @@ const useStyles = makeStyles({
     width: "100%",
     height: "100%",
     filter: "blur(30px)",
-    transition: "background-color 0.05s ease-in-out"
+    transition: "background-color 0.1s ease-in-out"
   }
 });
 
@@ -95,7 +95,7 @@ export default function Selector(props: ComponentProps) {
   const trackMouse = useCallback(
     (evt: MouseEvent) => {
       const rotationMultiplier = 10;
-      const distanceModifier = 0.02;
+      const distanceModifier = 0.03;
       const distanceLimit = 100;
       if (!selectionActive && selectorRef.current && width && height) {
         const { clientX: mouseLeft, clientY: mouseTop } = evt;
@@ -127,24 +127,39 @@ export default function Selector(props: ComponentProps) {
 
   const checkForNavigation = useCallback(
     (evt: KeyboardEvent) => {
-      if (evt.key === "Tab") {
+      if (
+        [
+          "Tab",
+          "ArrowUp",
+          "ArrowDown",
+          "ArrowLeft",
+          "ArrowRight",
+          "Enter",
+          " "
+        ].indexOf(evt.key) !== -1
+      ) {
         setFlat();
       }
     },
     [width, height]
   );
 
-  const mouseLeftWindow = useCallback(() => {
-    setFlat();
-  }, [width, height]);
+  const mouseLeftWindow = useCallback(
+    (evt: MouseEvent) => {
+      if (evt.target instanceof HTMLElement && !evt.relatedTarget) {
+        setFlat();
+      }
+    },
+    [width, height]
+  );
 
   useEffect(() => {
     document.addEventListener("mousemove", trackMouse);
-    document.addEventListener("mouseleave", mouseLeftWindow);
+    document.addEventListener("mouseout", mouseLeftWindow);
     document.addEventListener("keydown", checkForNavigation);
     return () => {
       document.removeEventListener("mousemove", trackMouse);
-      document.removeEventListener("mouseleave", mouseLeftWindow);
+      document.removeEventListener("mouseout", mouseLeftWindow);
       document.removeEventListener("keydown", checkForNavigation);
     };
   });
@@ -167,6 +182,7 @@ export default function Selector(props: ComponentProps) {
 
   return (
     <animated.div
+      aria-hidden
       className={clsx(
         classes.selection,
         width && height && !selectionActive && classes.active,
@@ -191,7 +207,7 @@ export default function Selector(props: ComponentProps) {
         className={classes.shine}
         style={{
           transform: shineTransform,
-          backgroundColor: selectionActive ? "#FFFFFF00" : "#FFFFFF30"
+          backgroundColor: selectionActive ? "#FFFFFF10" : "#FFFFFF30"
         }}
       />
     </animated.div>

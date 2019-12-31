@@ -109,12 +109,68 @@ export default function EmojiSection(props: ComponentProps) {
 
   const onKeyDown = useCallback(
     (evt: React.KeyboardEvent) => {
-      if (
-        (evt.key === " " || evt.key === "Enter") &&
-        evt.target instanceof HTMLElement
-      ) {
-        setActiveEmojiCodepoints(evt.target.dataset.codepoints || "");
-        setMouseDown(true);
+      const { target } = evt;
+      if (target && target instanceof HTMLElement) {
+        const {
+          nextElementSibling: nextSibling,
+          offsetLeft: left,
+          previousElementSibling: prevSibling
+        } = target;
+
+        switch (evt.key) {
+          case " ":
+          case "Enter":
+            setActiveEmojiCodepoints(target.dataset.codepoints || "");
+            setMouseDown(true);
+
+            break;
+          case "ArrowDown":
+            let nextTarget = nextSibling;
+            while (
+              nextTarget &&
+              nextTarget instanceof HTMLElement &&
+              nextTarget.offsetLeft !== left
+            ) {
+              nextTarget = nextTarget.nextElementSibling;
+            }
+            if (nextTarget && nextTarget instanceof HTMLElement) {
+              nextTarget.focus();
+            }
+            evt.preventDefault();
+            evt.stopPropagation();
+            break;
+          case "ArrowUp":
+            let prevTarget = prevSibling;
+            while (
+              prevTarget &&
+              prevTarget instanceof HTMLElement &&
+              prevTarget.offsetLeft !== left
+            ) {
+              prevTarget = prevTarget.previousElementSibling;
+            }
+            if (prevTarget && prevTarget instanceof HTMLElement) {
+              prevTarget.focus();
+            }
+            evt.preventDefault();
+            evt.stopPropagation();
+            break;
+          case "ArrowRight":
+            if (nextSibling && nextSibling instanceof HTMLElement) {
+              nextSibling.focus();
+              evt.preventDefault();
+              evt.stopPropagation();
+            }
+            break;
+          case "ArrowLeft":
+            if (prevSibling && prevSibling instanceof HTMLElement) {
+              prevSibling.focus();
+              evt.preventDefault();
+              evt.stopPropagation();
+            }
+            break;
+          default:
+            break;
+        }
       }
     },
     [setActiveEmojiCodepoints, setMouseDown]
@@ -199,8 +255,8 @@ export default function EmojiSection(props: ComponentProps) {
     document.addEventListener("mouseup", onMouseUp);
     updateBoxWidth();
     return () => {
-      window.removeEventListener("resize", onWindowResize),
-        document.removeEventListener("mouseup", onMouseUp);
+      window.removeEventListener("resize", onWindowResize);
+      document.removeEventListener("mouseup", onMouseUp);
     };
   });
 
