@@ -5,6 +5,8 @@ import React, {
   useState,
   useMemo
 } from "react";
+import { useToasts } from "react-toast-notifications";
+import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
@@ -27,18 +29,55 @@ interface ComponentProps {
 const useStyles = makeStyles({
   container: {
     display: "flex",
-    flexDirection: "column",
-    paddingTop: "30px"
+    flexDirection: "column"
+  },
+  sticky: {
+    backgroundColor: "#FFFFFFEE",
+    backdropFilter: "blur(3px)",
+    borderBottom: "1px solid #0000",
+    boxShadow: "0 0 0 #0000",
+    marginTop: "60px",
+    position: "sticky",
+    top: "-20px",
+    transformStyle: "preserve-3d",
+    transform: "translateZ(200px)",
+    transition: "border-bottom 0.1s ease-in-out",
+    width: "100%",
+    zIndex: 100,
+    "& .controls": {
+      opacity: 0,
+      transition: "opacity 0.1s ease-in-out",
+      fontStyle: "unset",
+      pointerEvents: "none"
+    }
+  },
+  stuck: {
+    borderBottom: "1px solid #DDDF",
+    "& .controls": {
+      opacity: 1,
+      pointerEvents: "all"
+    }
+  },
+  headerBorder: {
+    borderTop: `1px solid ${fontColor}`,
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingTop: "35px",
+    width: "100%"
   },
   sectionHeader: {
     fontFamily: "Lato",
     fontWeight: 300,
+    fontSize: "40px",
     fontStyle: "Italic",
     color: fontColor,
-    borderTop: `1px solid ${fontColor}`,
-    paddingBottom: "27px",
-    paddingTop: "27px",
-    width: "100%"
+    paddingBottom: "10px"
+  },
+  industryIcon: {
+    marginRight: "17px",
+    paddingRight: "15px",
+    paddingLeft: "15px"
   },
   emojiBox: {
     marginLeft: "-27px",
@@ -56,8 +95,11 @@ const useStyles = makeStyles({
 export default function EmojiSection(props: ComponentProps) {
   const { category, emojis } = props;
   const classes = useStyles();
+  const { addToast, removeToast } = useToasts();
 
   const boxRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
+  const [isHeaderStuck, setIsHeaderStuck] = useState(false);
   const [focusEmojiCodepoints, setFocusEmojiCodepoints] = useState("");
   const [focusEmojiLeft, setFocusEmojiLeft] = useState(0);
   const [focusEmojiTop, setFocusEmojiTop] = useState(0);
@@ -83,7 +125,12 @@ export default function EmojiSection(props: ComponentProps) {
       ?.split(",")
       .map(codepoint => parseInt(codepoint, 10));
     if (codepoints && codepoints.length) {
-      copyTextToClipboard(String.fromCodePoint(...codepoints));
+      const emoji = String.fromCodePoint(...codepoints);
+      copyTextToClipboard(emoji);
+      // addToast(`${emoji} was copied to your clipboard`, {
+      //   appearance: "success",
+      //   autoDismiss: true
+      // });
     }
   }, [activeEmojiCodepoints, copyTextToClipboard]);
 
@@ -250,13 +297,28 @@ export default function EmojiSection(props: ComponentProps) {
     setFocusEmojiHeight(0);
   }, []);
 
+  const checkForStuckHeader = useCallback(
+    ([entry]: ReadonlyArray<IntersectionObserverEntry>) => {
+      setIsHeaderStuck(!entry.isIntersecting);
+    },
+    []
+  );
+
   useEffect(() => {
     window.addEventListener("resize", onWindowResize);
     document.addEventListener("mouseup", onMouseUp);
     updateBoxWidth();
+    const headerObserver = new IntersectionObserver(checkForStuckHeader, {
+      threshold: [0.9]
+    });
+    if (headerRef.current) {
+      headerObserver.observe(headerRef.current);
+    }
+
     return () => {
       window.removeEventListener("resize", onWindowResize);
       document.removeEventListener("mouseup", onMouseUp);
+      headerObserver.disconnect();
     };
   });
 
@@ -302,31 +364,51 @@ export default function EmojiSection(props: ComponentProps) {
   }, [emojis]);
 
   return (
-    <Container maxWidth="md" className={classes.container}>
-      <Typography
-        className={classes.sectionHeader}
-        variant="h4"
-        component="h2"
-        gutterBottom
+    <React.Fragment>
+      <div
+        className={clsx(classes.sticky, isHeaderStuck && classes.stuck)}
+        ref={headerRef}
       >
-        {category}
-      </Typography>
-      <Box className={classes.emojiBox}>
-        <Selector
-          top={focusEmojiTop}
-          left={focusEmojiLeft}
-          width={focusEmojiWidth}
-          height={focusEmojiHeight}
-          selectionActive={mouseDown}
-        >
-          <div className={classes.display} style={{ width: boxWidth }}>
-            {selectionEmojiEls}
+        <Container maxWidth="md">
+          <div className={classes.headerBorder}>
+            <Typography
+              className={classes.sectionHeader}
+              variant="h4"
+              component="h2"
+            >
+              {category}
+            </Typography>
+            <a
+              className={clsx(
+                classes.sectionHeader,
+                classes.industryIcon,
+                "controls"
+              )}
+              href="#top"
+            >
+              🏭
+            </a>
           </div>
-        </Selector>
-        <div className={classes.display} ref={boxRef}>
-          {displayEmojiEls}
-        </div>
-      </Box>
-    </Container>
+        </Container>
+      </div>
+      <Container maxWidth="md" className={classes.container}>
+        <Box className={classes.emojiBox}>
+          <Selector
+            top={focusEmojiTop}
+            left={focusEmojiLeft}
+            width={focusEmojiWidth}
+            height={focusEmojiHeight}
+            selectionActive={mouseDown}
+          >
+            <div className={classes.display} style={{ width: boxWidth }}>
+              {selectionEmojiEls}
+            </div>
+          </Selector>
+          <div className={classes.display} ref={boxRef}>
+            {displayEmojiEls}
+          </div>
+        </Box>
+      </Container>
+    </React.Fragment>
   );
 }

@@ -17,7 +17,7 @@ const useStyles = makeStyles({
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingTop: "30px"
+    paddingTop: "60px"
   },
   box: {
     display: "flex",
@@ -25,12 +25,12 @@ const useStyles = makeStyles({
   },
   typography: {
     fontFamily: "Permanent Marker",
-    fontSize: "80px",
+    fontSize: "90px",
     color: fontColor
   },
   typography2: {
     fontFamily: "Permanent Marker",
-    fontSize: "60px",
+    fontSize: "70px",
     color: fontColor
   },
   icon: {
@@ -82,7 +82,7 @@ const useStyles = makeStyles({
 export default function Header() {
   const classes = useStyles();
   return (
-    <Container maxWidth="md" className={classes.container}>
+    <Container maxWidth="md" className={classes.container} id="top">
       <Box className={classes.box} component="header">
         <Typography className={classes.typography} variant="h4" component="h1">
           Emoji

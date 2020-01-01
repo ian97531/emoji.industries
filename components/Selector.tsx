@@ -7,8 +7,6 @@ import React, {
 } from "react";
 import clsx from "clsx";
 import { useSpring, animated, interpolate } from "react-spring";
-
-import Clipboard from "react-clipboard.js";
 import { makeStyles } from "@material-ui/core/styles";
 
 import { clamp } from "../utils/math";
@@ -21,8 +19,6 @@ interface ComponentProps {
   children: ReactElement;
   selectionActive: boolean;
 }
-
-const shineSize = 165;
 
 const useStyles = makeStyles({
   selection: {
@@ -59,6 +55,8 @@ const useStyles = makeStyles({
     transition: "background-color 0.1s ease-in-out"
   }
 });
+
+const shineSize = 165;
 
 export default function Selector(props: ComponentProps) {
   const { children, top, left, width, height, selectionActive } = props;

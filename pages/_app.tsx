@@ -2,6 +2,7 @@ import React from "react";
 import App from "next/app";
 import Head from "next/head";
 import Router from "next/router";
+import { ToastProvider } from "react-toast-notifications";
 import { ThemeProvider } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import theme from "../theme";
@@ -36,11 +37,13 @@ export default class MyApp extends App {
         <Head>
           <title>Emoji Industries</title>
         </Head>
-        <ThemeProvider theme={theme}>
-          {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-          <CssBaseline />
-          <Component {...pageProps} />
-        </ThemeProvider>
+        <ToastProvider autoDismissTimeout={2000} placement="bottom-center">
+          <ThemeProvider theme={theme}>
+            {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+            <CssBaseline />
+            <Component {...pageProps} />
+          </ThemeProvider>
+        </ToastProvider>
       </React.Fragment>
     );
   }
