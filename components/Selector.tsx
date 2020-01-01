@@ -31,6 +31,7 @@ const useStyles = makeStyles({
     pointerEvents: "none",
     position: "absolute",
     transformOrigin: "center",
+    transformStyle: "preserve-3d",
     transition: "box-shadow 0.1s ease-in-out",
     zIndex: 10
   },

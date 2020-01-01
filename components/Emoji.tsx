@@ -15,20 +15,19 @@ const paddingTop = 10;
 const useStyles = makeStyles({
   emoji: {
     background: "none",
-    borderRadius: "10px",
-    border: "1px solid transparent",
+    border: "none",
     cursor: "pointer",
     fontSize: "120px",
     height: `${emojiSize + paddingTop}px`,
     marginBottom: "8px",
     paddingTop: `${paddingTop}px`,
-    position: "relative",
     textAlign: "center",
-    transformOrigin: "center",
     width: `${emojiSize}px`,
-    transformStyle: "preserve-3d",
     userSelect: "none",
-    outline: "none"
+    outline: "none",
+    "&::-moz-focus-inner": {
+      border: 0
+    }
   }
 });
 
