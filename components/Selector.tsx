@@ -32,7 +32,7 @@ const useStyles = makeStyles({
     position: "absolute",
     transformOrigin: "center",
     transformStyle: "preserve-3d",
-    transition: "box-shadow 0.1s ease-in-out",
+    transition: "box-shadow 0.05s ease-in-out",
     zIndex: 10
   },
   active: {
@@ -69,18 +69,37 @@ export default function Selector(props: ComponentProps) {
   const [xShine, setXShine] = useState(0);
   const [yShine, setYShine] = useState(0);
   const [scale, setScale] = useState(1);
+  const [isVisible, setIsVisible] = useState(false);
 
   const positionSpring = useSpring({
-    selectorTransform: [top, left],
-    width,
-    height,
-    config: { mass: 1, tension: 250, friction: 20 }
+    to: { selectorTransform: [top, left] },
+    config: { mass: 0.9, tension: 250, friction: 20 },
+    immediate: !isVisible,
+    onRest: () => {
+      if (width && height && !isVisible) {
+        setIsVisible(true);
+      }
+    }
+  });
+
+  if ((!width || !height) && isVisible) {
+    setIsVisible(false);
+  }
+
+  const sizeSpring = useSpring({
+    to: { width, height },
+    config: { mass: 0.9, tension: 250, friction: 20 }
   });
 
   const rotationSpring = useSpring({
-    selectorTransform: selectionActive ? [0, 0, 1] : [xRotate, yRotate, scale],
-    shineTransform: [xShine, yShine],
-    config: { mass: 1, tension: 300, friction: 12, clamp: true }
+    to: {
+      selectorTransform: selectionActive
+        ? [0, 0, 1]
+        : [xRotate, yRotate, scale],
+      shineTransform: [xShine, yShine]
+    },
+
+    config: { mass: 0.2, tension: 800, friction: 30, clamp: true }
   });
 
   const setFlat = (scale = 1) => {
@@ -166,7 +185,7 @@ export default function Selector(props: ComponentProps) {
   const selectorTransform = interpolate(
     [positionSpring.selectorTransform, rotationSpring.selectorTransform],
     ([selectTop, selectLeft], [selectXRotate, selectYRotate, scale]) =>
-      `translate(${selectLeft}px, ${selectTop}px) perspective(700px) rotateX(${selectXRotate}deg) rotateY(${selectYRotate}deg) scale(${scale})`
+      `translate3d(${selectLeft}px, ${selectTop}px, 50px) perspective(700px) rotateX(${selectXRotate}deg) rotateY(${selectYRotate}deg) scale(${scale})`
   );
 
   const contentTransform = positionSpring.selectorTransform.interpolate(
@@ -190,8 +209,8 @@ export default function Selector(props: ComponentProps) {
       ref={selectorRef}
       style={{
         transform: selectorTransform,
-        width: positionSpring.width.interpolate(width => `${width}px`),
-        height: positionSpring.height.interpolate(height => `${height}px`)
+        width: sizeSpring.width.interpolate(width => `${width}px`),
+        height: sizeSpring.height.interpolate(height => `${height}px`)
       }}
     >
       <animated.div

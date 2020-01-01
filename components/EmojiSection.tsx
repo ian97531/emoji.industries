@@ -20,6 +20,7 @@ import { fontColor } from "../constants";
 import { IEmoji } from "../models/emoji/types";
 
 import { copyTextToClipboard } from "../utils/clipboard";
+import { clamp } from "../utils/math";
 
 interface ComponentProps {
   category: string;
@@ -29,21 +30,21 @@ interface ComponentProps {
 const useStyles = makeStyles({
   container: {
     display: "flex",
-    flexDirection: "column"
+    flexDirection: "column",
+    paddingBottom: "50px"
   },
   sticky: {
-    backgroundColor: "#FFFFFF00",
+    backgroundColor: "#FFFFFFDD",
     backdropFilter: "blur(3px)",
     borderBottom: "1px solid #0000",
     boxShadow: "0 0 0 #0000",
-    marginTop: "60px",
+    marginTop: "30px",
     position: "sticky",
-    top: "-20px",
+    top: "-1px",
     transformStyle: "preserve-3d",
-    transform: "translateZ(200px)",
-    transition: "border-bottom 0.1s ease-in-out",
+    transform: "translateZ(0px)",
     width: "100%",
-    zIndex: 100,
+    zIndex: 1,
     "& .controls": {
       opacity: 0,
       transition: "opacity 0.1s ease-in-out",
@@ -52,19 +53,19 @@ const useStyles = makeStyles({
     }
   },
   stuck: {
-    backgroundColor: "#FFFFFFDD",
     borderBottom: "1px solid #DDDF",
+    transform: "translateZ(200px)",
+    zIndex: 100,
     "& .controls": {
       opacity: 1,
       pointerEvents: "all"
     }
   },
   headerBorder: {
-    borderTop: `1px solid ${fontColor}`,
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingTop: "35px",
+    paddingTop: "15px",
     width: "100%"
   },
   sectionHeader: {
@@ -90,6 +91,9 @@ const useStyles = makeStyles({
     flexWrap: "wrap",
     justifyContent: "space-between",
     position: "relative"
+  },
+  divider: {
+    borderBottom: `1px solid ${fontColor}`
   }
 });
 
@@ -101,7 +105,10 @@ export default function EmojiSection(props: ComponentProps) {
   const boxRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
   const [isHeaderStuck, setIsHeaderStuck] = useState(false);
+
   const [focusEmojiCodepoints, setFocusEmojiCodepoints] = useState("");
+  const focusEmojiCodepointsRef = useRef(focusEmojiCodepoints);
+  focusEmojiCodepointsRef.current = focusEmojiCodepoints;
   const [focusEmojiLeft, setFocusEmojiLeft] = useState(0);
   const [focusEmojiTop, setFocusEmojiTop] = useState(0);
   const [focusEmojiWidth, setFocusEmojiWidth] = useState(0);
@@ -109,6 +116,7 @@ export default function EmojiSection(props: ComponentProps) {
 
   const [activeEmojiCodepoints, setActiveEmojiCodepoints] = useState("");
   const [mouseDown, setMouseDown] = useState(false);
+  const [isUsingMouse, setIsUsingMouse] = useState(false);
 
   const [boxWidth, setBoxWidth] = useState(0);
 
@@ -155,6 +163,61 @@ export default function EmojiSection(props: ComponentProps) {
     ]
   );
 
+  const removeSectionFocus = useCallback(() => {
+    if (focusEmojiCodepointsRef.current === "") {
+      setFocusEmojiWidth(0);
+      setFocusEmojiHeight(0);
+    }
+  }, [focusEmojiCodepointsRef, setFocusEmojiWidth, setFocusEmojiHeight]);
+
+  const blurEmoji = useCallback(
+    (evt: React.FocusEvent<HTMLButtonElement>) => {
+      setFocusEmojiCodepoints("");
+      setTimeout(removeSectionFocus, 100);
+    },
+    [removeSectionFocus, setFocusEmojiCodepoints]
+  );
+
+  const focusPreviousEmoji = (currentElement: HTMLElement) => {
+    const { previousElementSibling: prevSibling } = currentElement;
+    if (prevSibling && prevSibling instanceof HTMLElement) {
+      prevSibling.focus();
+      return true;
+    } else {
+      const nextEls = Array.from(document.querySelectorAll('[tabindex="0"]'));
+      const currentIndex = nextEls.indexOf(currentElement);
+      if (currentIndex !== -1) {
+        const nextSelection =
+          nextEls[clamp(currentIndex - 1, 0, nextEls.length - 1)];
+        if (nextSelection instanceof HTMLElement) {
+          nextSelection.focus();
+          return true;
+        }
+      }
+    }
+    return false;
+  };
+
+  const focusNextEmoji = (currentElement: HTMLElement) => {
+    const { nextElementSibling: nextSibling } = currentElement;
+    if (nextSibling && nextSibling instanceof HTMLElement) {
+      nextSibling.focus();
+      return true;
+    } else {
+      const nextEls = Array.from(document.querySelectorAll('[tabindex="0"]'));
+      const currentIndex = nextEls.indexOf(currentElement);
+      if (currentIndex !== -1) {
+        const nextSelection =
+          nextEls[clamp(currentIndex + 1, 0, nextEls.length - 1)];
+        if (nextSelection instanceof HTMLElement) {
+          nextSelection.focus();
+          return true;
+        }
+      }
+    }
+    return false;
+  };
+
   const onKeyDown = useCallback(
     (evt: React.KeyboardEvent) => {
       const { target } = evt;
@@ -162,59 +225,84 @@ export default function EmojiSection(props: ComponentProps) {
         const {
           nextElementSibling: nextSibling,
           offsetLeft: left,
+          offsetTop: top,
           previousElementSibling: prevSibling
         } = target;
 
         switch (evt.key) {
           case " ":
           case "Enter":
-            setActiveEmojiCodepoints(target.dataset.codepoints || "");
             setMouseDown(true);
-
+            setActiveEmojiCodepoints(target.dataset.codepoints || "");
             break;
           case "ArrowDown":
-            let nextTarget = nextSibling;
-            while (
-              nextTarget &&
-              nextTarget instanceof HTMLElement &&
-              nextTarget.offsetLeft !== left
-            ) {
-              nextTarget = nextTarget.nextElementSibling;
+            setIsUsingMouse(false);
+
+            if (nextSibling) {
+              let nextTarget = nextSibling;
+              while (
+                nextTarget &&
+                nextTarget instanceof HTMLElement &&
+                (nextTarget.offsetTop === top || nextTarget.offsetLeft < left)
+              ) {
+                if (nextTarget.nextElementSibling) {
+                  nextTarget = nextTarget.nextElementSibling;
+                } else {
+                  break;
+                }
+              }
+              if (nextTarget && nextTarget instanceof HTMLElement) {
+                nextTarget.focus();
+                evt.preventDefault();
+                evt.stopPropagation();
+              }
+            } else if (focusNextEmoji(target)) {
+              evt.preventDefault();
+              evt.stopPropagation();
             }
-            if (nextTarget && nextTarget instanceof HTMLElement) {
-              nextTarget.focus();
-            }
-            evt.preventDefault();
-            evt.stopPropagation();
+
             break;
           case "ArrowUp":
-            let prevTarget = prevSibling;
-            while (
-              prevTarget &&
-              prevTarget instanceof HTMLElement &&
-              prevTarget.offsetLeft !== left
-            ) {
-              prevTarget = prevTarget.previousElementSibling;
+            setIsUsingMouse(false);
+            if (prevSibling) {
+              let prevTarget = prevSibling;
+              while (
+                prevTarget &&
+                prevTarget instanceof HTMLElement &&
+                (prevTarget.offsetTop === top || prevTarget.offsetLeft > left)
+              ) {
+                if (prevTarget.previousElementSibling) {
+                  prevTarget = prevTarget.previousElementSibling;
+                } else {
+                  break;
+                }
+              }
+              if (prevTarget && prevTarget instanceof HTMLElement) {
+                prevTarget.focus();
+                evt.preventDefault();
+                evt.stopPropagation();
+              }
+            } else if (focusPreviousEmoji(target)) {
+              evt.preventDefault();
+              evt.stopPropagation();
             }
-            if (prevTarget && prevTarget instanceof HTMLElement) {
-              prevTarget.focus();
-            }
-            evt.preventDefault();
-            evt.stopPropagation();
             break;
           case "ArrowRight":
-            if (nextSibling && nextSibling instanceof HTMLElement) {
-              nextSibling.focus();
+            setIsUsingMouse(false);
+            if (focusNextEmoji(target)) {
               evt.preventDefault();
               evt.stopPropagation();
             }
             break;
           case "ArrowLeft":
-            if (prevSibling && prevSibling instanceof HTMLElement) {
-              prevSibling.focus();
+            setIsUsingMouse(false);
+            if (focusPreviousEmoji(target)) {
               evt.preventDefault();
               evt.stopPropagation();
             }
+            break;
+          case "Tab":
+            setIsUsingMouse(false);
             break;
           default:
             break;
@@ -242,6 +330,9 @@ export default function EmojiSection(props: ComponentProps) {
   const onMouseDown = useCallback(
     (evt: React.MouseEvent) => {
       if (evt.target instanceof HTMLElement) {
+        if (document.activeElement !== evt.target) {
+          evt.target.focus();
+        }
         setActiveEmojiCodepoints(evt.target.dataset.codepoints || "");
       }
       setMouseDown(true);
@@ -251,11 +342,16 @@ export default function EmojiSection(props: ComponentProps) {
 
   const onMouseEnter = useCallback(
     (evt: React.MouseEvent) => {
-      if (!mouseDown && evt.target && evt.target instanceof HTMLElement) {
+      if (
+        isUsingMouse &&
+        !mouseDown &&
+        evt.target &&
+        evt.target instanceof HTMLElement
+      ) {
         evt.target.focus();
       }
     },
-    [mouseDown]
+    [mouseDown, isUsingMouse]
   );
 
   const onMouseLeave = useCallback(() => {
@@ -305,12 +401,28 @@ export default function EmojiSection(props: ComponentProps) {
     []
   );
 
+  const setUsingMouse = useCallback(
+    (evt: MouseEvent) => {
+      if (!isUsingMouse) {
+        setIsUsingMouse(true);
+        if (
+          evt.target instanceof HTMLElement &&
+          evt.target.dataset.codepoints
+        ) {
+          evt.target.focus();
+        }
+      }
+    },
+    [setIsUsingMouse]
+  );
+
   useEffect(() => {
     window.addEventListener("resize", onWindowResize);
     document.addEventListener("mouseup", onMouseUp);
+    document.addEventListener("mousemove", setUsingMouse);
     updateBoxWidth();
     const headerObserver = new IntersectionObserver(checkForStuckHeader, {
-      threshold: [0.9]
+      threshold: [1]
     });
     if (headerRef.current) {
       headerObserver.observe(headerRef.current);
@@ -319,9 +431,10 @@ export default function EmojiSection(props: ComponentProps) {
     return () => {
       window.removeEventListener("resize", onWindowResize);
       document.removeEventListener("mouseup", onMouseUp);
+      document.removeEventListener("mousemove", setUsingMouse);
       headerObserver.disconnect();
     };
-  });
+  }, []);
 
   const displayEmojiEls = useMemo(
     () =>
@@ -337,6 +450,7 @@ export default function EmojiSection(props: ComponentProps) {
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
           onFocus={setFocusEmoji}
+          onBlur={blurEmoji}
           tabIndex={0}
           title={emoji.name}
         />
@@ -364,52 +478,61 @@ export default function EmojiSection(props: ComponentProps) {
     ));
   }, [emojis]);
 
-  return (
-    <React.Fragment>
-      <div
-        className={clsx(classes.sticky, isHeaderStuck && classes.stuck)}
-        ref={headerRef}
-      >
+  if (emojis.length) {
+    return (
+      <div>
+        <div
+          className={clsx(classes.sticky, isHeaderStuck && classes.stuck)}
+          ref={headerRef}
+        >
+          <Container maxWidth="md">
+            <div className={classes.headerBorder}>
+              <Typography
+                className={classes.sectionHeader}
+                variant="h4"
+                component="h2"
+              >
+                {category}
+              </Typography>
+              <a
+                aria-hidden={!isHeaderStuck}
+                tabIndex={isHeaderStuck ? 0 : -1}
+                className={clsx(
+                  classes.sectionHeader,
+                  classes.industryIcon,
+                  "controls"
+                )}
+                href="#top"
+              >
+                🏭
+              </a>
+            </div>
+          </Container>
+        </div>
+        <Container maxWidth="md" className={classes.container}>
+          <Box className={classes.emojiBox}>
+            <Selector
+              top={focusEmojiTop}
+              left={focusEmojiLeft}
+              width={focusEmojiWidth}
+              height={focusEmojiHeight}
+              selectionActive={mouseDown}
+            >
+              <div className={classes.display} style={{ width: boxWidth }}>
+                {selectionEmojiEls}
+              </div>
+            </Selector>
+            <div className={classes.display} ref={boxRef}>
+              {displayEmojiEls}
+            </div>
+          </Box>
+        </Container>
         <Container maxWidth="md">
-          <div className={classes.headerBorder}>
-            <Typography
-              className={classes.sectionHeader}
-              variant="h4"
-              component="h2"
-            >
-              {category}
-            </Typography>
-            <a
-              className={clsx(
-                classes.sectionHeader,
-                classes.industryIcon,
-                "controls"
-              )}
-              href="#top"
-            >
-              🏭
-            </a>
-          </div>
+          <Box className={classes.divider}></Box>
         </Container>
       </div>
-      <Container maxWidth="md" className={classes.container}>
-        <Box className={classes.emojiBox}>
-          <Selector
-            top={focusEmojiTop}
-            left={focusEmojiLeft}
-            width={focusEmojiWidth}
-            height={focusEmojiHeight}
-            selectionActive={mouseDown}
-          >
-            <div className={classes.display} style={{ width: boxWidth }}>
-              {selectionEmojiEls}
-            </div>
-          </Selector>
-          <div className={classes.display} ref={boxRef}>
-            {displayEmojiEls}
-          </div>
-        </Box>
-      </Container>
-    </React.Fragment>
-  );
+    );
+  }
+
+  return null;
 }
