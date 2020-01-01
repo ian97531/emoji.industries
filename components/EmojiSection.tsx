@@ -32,7 +32,7 @@ const useStyles = makeStyles({
     flexDirection: "column"
   },
   sticky: {
-    backgroundColor: "#FFFFFFEE",
+    backgroundColor: "#FFFFFF00",
     backdropFilter: "blur(3px)",
     borderBottom: "1px solid #0000",
     boxShadow: "0 0 0 #0000",
@@ -52,6 +52,7 @@ const useStyles = makeStyles({
     }
   },
   stuck: {
+    backgroundColor: "#FFFFFFDD",
     borderBottom: "1px solid #DDDF",
     "& .controls": {
       opacity: 1,
