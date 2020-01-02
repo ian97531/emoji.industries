@@ -19,6 +19,7 @@ const useStyles = makeStyles({
     borderBottom: "1px solid var(--text-primary)",
     height: "50px",
     marginTop: "45px",
+    marginBottom: "30px",
     fontFamily: "Lato",
     fontWeight: 300,
     fontSize: "26px",

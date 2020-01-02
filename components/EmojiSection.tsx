@@ -35,7 +35,7 @@ const useStyles = makeStyles({
     backgroundColor: "var(--background-DD)",
     backdropFilter: "blur(3px)",
     borderBottom: "1px solid var(--border-transparent)",
-    marginTop: "30px",
+
     position: "sticky",
     top: "-1px",
     transformStyle: "preserve-3d",
@@ -80,7 +80,11 @@ const useStyles = makeStyles({
   },
   emojiBox: {
     marginLeft: "-27px",
-    marginRight: "-28px"
+    marginRight: "-28px",
+    "@media only screen and (max-device-width: 768px)": {
+      marginLeft: 0,
+      marginRight: 0
+    }
   },
   display: {
     display: "flex",
@@ -90,11 +94,13 @@ const useStyles = makeStyles({
     position: "relative"
   },
   divider: {
-    borderBottom: "1px solid var(--text-primary)"
+    borderBottom: "1px solid var(--text-primary)",
+    marginBottom: "30px"
   },
   toastList: {
     bottom: 0,
     left: 0,
+    right: 0,
     position: "fixed",
     margin: 0,
     width: "100%",
@@ -103,27 +109,33 @@ const useStyles = makeStyles({
     display: "flex",
     flexDirection: "column",
     paddingBottom: "20px",
+    paddingLeft: 0,
     height: "50px",
     zIndex: 90,
     transformStyle: "preserve-3d",
     transform: "translate3d(0, 0, 100px)"
   },
   toast: {
+    alignItems: "center",
     backgroundColor: "var(--selection-DD)",
     backdropFilter: "blur(5px)",
     borderBottom: "1px solid var(--border)",
     boxShadow: "0 3px 10px var(--shadow-18)",
-    display: "block",
+    display: "flex",
     color: "var(--text-primary)",
-    fontFamily: "Lato",
-    fontWeight: 300,
     fontSize: "18px",
     padding: "10px",
     paddingLeft: "25px",
     paddingRight: "25px",
     borderRadius: "30px",
     marginBottom: "15px",
-    position: "absolute"
+    position: "absolute",
+    "& span": {
+      fontFamily: '"Lato", sans-serif',
+      fontWeight: 300,
+      fontSize: "18px",
+      marginLeft: "6px"
+    }
   }
 });
 
@@ -483,6 +495,35 @@ export default function EmojiSection(props: ComponentProps) {
     ]
   );
 
+  const onTouchStart = useCallback((evt: React.TouchEvent) => {
+    if (evt.target instanceof HTMLElement) {
+      setActiveEmojiCodepoints(evt.target.dataset.codepoints || "");
+      evt.preventDefault();
+      evt.stopPropagation();
+    }
+  }, []);
+
+  const onTouchMove = useCallback((evt: React.TouchEvent) => {
+    if (evt.target instanceof HTMLElement) {
+      setActiveEmojiCodepoints("");
+    }
+  }, []);
+
+  const onTouchEnd = useCallback(
+    (evt: React.TouchEvent) => {
+      if (activeEmojiCodepoints) {
+        copyActiveEmojiToClipboard();
+        setActiveEmojiCodepoints("");
+      }
+    },
+    [
+      activeEmojiCodepoints,
+      setActiveEmojiCodepoints,
+      setMouseDown,
+      copyActiveEmojiToClipboard
+    ]
+  );
+
   const onWindowResize = useCallback(() => {
     updateBoxWidth();
     setFocusEmojiWidth(0);
@@ -545,6 +586,9 @@ export default function EmojiSection(props: ComponentProps) {
           onMouseDown={onMouseDown}
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
+          onTouchEnd={onTouchEnd}
           onFocus={setFocusEmoji}
           onBlur={blurEmoji}
           tabIndex={0}
@@ -634,7 +678,7 @@ export default function EmojiSection(props: ComponentProps) {
               className={classes.toast}
               role="alert"
             >
-              {item} was copied to the clipboard
+              {item} <span>was copied to your clipboard</span>
             </animated.li>
           ))}
         </ul>

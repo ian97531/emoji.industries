@@ -89,20 +89,18 @@ export default class MyApp extends App {
               background-color: var(--background);
               margin: 0;
               padding: 0;
-              scrollbar-width: thin;
-              scrollbar-color: var(--shadow-88) var(--border-visible);
             }
             body::-webkit-scrollbar {
               width: 18px;
             }
             body::-webkit-scrollbar-track {
-              background: var(--background-DD);
-              border-left: 1px solid var(--border-visible);
+              background: var(--background);
+              box-shadow: inset 0 0 4px var(--shadow-55);
             }
             body::-webkit-scrollbar-thumb {
               background-color: var(--shadow-88);
               border-radius: 9px;
-              border: 1px solid var(--border-visible);
+              border-left: 4px solid var(--background);
             }
           `}
         </style>

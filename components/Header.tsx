@@ -15,7 +15,13 @@ const useStyles = makeStyles({
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingTop: "60px"
+    paddingTop: "60px",
+    "@media only screen and (max-device-width: 480px)": {
+      paddingTop: "40px"
+    },
+    "@media only screen and (min-device-width: 481px) and (max-device-width: 768px)": {
+      paddingTop: "50px"
+    }
   },
   box: {
     display: "flex",
@@ -24,18 +30,36 @@ const useStyles = makeStyles({
   typography: {
     fontFamily: "Permanent Marker",
     fontSize: "90px",
-    color: "var(--text-primary)"
+    color: "var(--text-primary)",
+    "@media only screen and (max-device-width: 480px)": {
+      fontSize: "60px"
+    },
+    "@media only screen and (min-device-width: 481px) and (max-device-width: 768px)": {
+      fontSize: "80px"
+    }
   },
   typography2: {
     fontFamily: "Permanent Marker",
     fontSize: "70px",
-    color: "var(--text-primary)"
+    color: "var(--text-primary)",
+    "@media only screen and (max-device-width: 480px)": {
+      fontSize: "40px"
+    },
+    "@media only screen and (min-device-width: 481px) and (max-device-width: 768px)": {
+      fontSize: "60px"
+    }
   },
   icon: {
     fontSize: "120px",
     alignSelf: "flex-end",
     marginBottom: "-0.065em",
-    position: "relative"
+    position: "relative",
+    "@media only screen and (max-device-width: 480px)": {
+      fontSize: "80px"
+    },
+    "@media only screen and (min-device-width: 481px) and (max-device-width: 768px)": {
+      fontSize: "120px"
+    }
   },
   shadow1: {
     left: `${left}px`,
@@ -45,7 +69,10 @@ const useStyles = makeStyles({
     position: "absolute",
     boxShadow: "0 0 16px 2px var(--shadow-88), 0 0 5px var(--shadow-88)",
     transformStyle: "preserve-3d",
-    borderRadius: "5px"
+    borderRadius: "5px",
+    "@media only screen and (max-device-width: 768px)": {
+      display: "none"
+    }
   },
   shadow2: {
     position: "absolute",
@@ -55,7 +82,10 @@ const useStyles = makeStyles({
     height: "20px",
     filter: "blur(5px)",
     backgroundColor: "var(--shadow-66)",
-    transform: "skewX(-40deg) translateX(10px) translateY(0px)"
+    transform: "skewX(-40deg) translateX(10px) translateY(0px)",
+    "@media only screen and (max-device-width: 768px)": {
+      display: "none"
+    }
   },
   clipInFront: {
     position: "absolute",

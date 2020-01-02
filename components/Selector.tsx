@@ -27,14 +27,17 @@ const useStyles = makeStyles({
     boxShadow:
       "inset 0 0px 0px 0px var(--shadow-transparent), 0px 0px 0px 0px var(--shadow-transparent)",
     cursor: "pointer",
-    display: "block",
+    display: "none",
     overflow: "hidden",
     pointerEvents: "none",
     position: "absolute",
     transformOrigin: "center",
     transformStyle: "preserve-3d",
     transition: "box-shadow 0.05s ease-in-out",
-    zIndex: 10
+    zIndex: 10,
+    "@media (hover)": {
+      display: "block"
+    }
   },
   active: {
     boxShadow:
