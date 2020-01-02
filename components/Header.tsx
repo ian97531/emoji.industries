@@ -1,4 +1,5 @@
 import React from "react";
+import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
@@ -35,7 +36,7 @@ const useStyles = makeStyles({
       fontSize: "60px"
     },
     "@media only screen and (min-device-width: 481px) and (max-device-width: 768px)": {
-      fontSize: "80px"
+      fontSize: "75px"
     }
   },
   typography2: {
@@ -46,7 +47,7 @@ const useStyles = makeStyles({
       fontSize: "40px"
     },
     "@media only screen and (min-device-width: 481px) and (max-device-width: 768px)": {
-      fontSize: "60px"
+      fontSize: "55px"
     }
   },
   icon: {
@@ -56,9 +57,6 @@ const useStyles = makeStyles({
     position: "relative",
     "@media only screen and (max-device-width: 480px)": {
       fontSize: "80px"
-    },
-    "@media only screen and (min-device-width: 481px) and (max-device-width: 768px)": {
-      fontSize: "120px"
     }
   },
   shadow1: {
@@ -69,10 +67,7 @@ const useStyles = makeStyles({
     position: "absolute",
     boxShadow: "0 0 16px 2px var(--shadow-88), 0 0 5px var(--shadow-88)",
     transformStyle: "preserve-3d",
-    borderRadius: "5px",
-    "@media only screen and (max-device-width: 768px)": {
-      display: "none"
-    }
+    borderRadius: "5px"
   },
   shadow2: {
     position: "absolute",
@@ -82,10 +77,7 @@ const useStyles = makeStyles({
     height: "20px",
     filter: "blur(5px)",
     backgroundColor: "var(--shadow-66)",
-    transform: "skewX(-40deg) translateX(10px) translateY(0px)",
-    "@media only screen and (max-device-width: 768px)": {
-      display: "none"
-    }
+    transform: "skewX(-40deg) translateX(10px) translateY(0px)"
   },
   clipInFront: {
     position: "absolute",
@@ -94,7 +86,11 @@ const useStyles = makeStyles({
     bottom: "0",
     top: "0",
     "--webkit-clip-path": `polygon(${left}px ${top}px, ${left}px calc(100% - ${bottom}px), calc(100% - ${right}px) calc(100% - ${bottom}px), calc(100% - ${right}px) ${top}px, calc(100% - ${right}px + ${distance}px) ${top}px, calc(100% - ${right}px + ${distance}px) calc(100% - ${bottom}px + ${distance}px), calc(${left}px - ${distance}px) calc(100% - ${bottom}px + ${distance}px), calc(${left}px - ${distance}px) ${top}px)`,
-    clipPath: `polygon(${left}px ${top}px, ${left}px calc(100% - ${bottom}px), calc(100% - ${right}px) calc(100% - ${bottom}px), calc(100% - ${right}px) ${top}px, calc(100% - ${right}px + ${distance}px) ${top}px, calc(100% - ${right}px + ${distance}px) calc(100% - ${bottom}px + ${distance}px), calc(${left}px - ${distance}px) calc(100% - ${bottom}px + ${distance}px), calc(${left}px - ${distance}px) ${top}px)`
+    clipPath: `polygon(${left}px ${top}px, ${left}px calc(100% - ${bottom}px), calc(100% - ${right}px) calc(100% - ${bottom}px), calc(100% - ${right}px) ${top}px, calc(100% - ${right}px + ${distance}px) ${top}px, calc(100% - ${right}px + ${distance}px) calc(100% - ${bottom}px + ${distance}px), calc(${left}px - ${distance}px) calc(100% - ${bottom}px + ${distance}px), calc(${left}px - ${distance}px) ${top}px)`,
+    display: "none",
+    "@media screen and (-webkit-min-device-pixel-ratio:0) and (min-resolution:.001dpcm)": {
+      display: "block"
+    }
   },
   clipBehind: {
     position: "absolute",
@@ -103,7 +99,11 @@ const useStyles = makeStyles({
     bottom: "0",
     top: "0",
     "--webkit-clip-path": `polygon(${left}px ${top}px, ${left}px calc(100% - ${bottom}px), calc(100% - ${right}px) calc(100% - ${bottom}px), calc(100% - ${right}px) ${top}px, calc(100% - ${right}px + ${distance}px) ${top}px, calc(100% - ${right}px + ${distance}px) calc(100% - ${bottom}px + ${distance}px), calc(100% - ${right}px) calc(100% - ${bottom}px), ${left}px calc(100% - ${bottom}px))`,
-    clipPath: `polygon(${left}px ${top}px, ${left}px calc(100% - ${bottom}px), calc(100% - ${right}px) calc(100% - ${bottom}px), calc(100% - ${right}px) ${top}px, calc(100% - ${right}px + ${distance}px) ${top}px, calc(100% - ${right}px + ${distance}px) calc(100% - ${bottom}px + ${distance}px), calc(100% - ${right}px) calc(100% - ${bottom}px), ${left}px calc(100% - ${bottom}px))`
+    clipPath: `polygon(${left}px ${top}px, ${left}px calc(100% - ${bottom}px), calc(100% - ${right}px) calc(100% - ${bottom}px), calc(100% - ${right}px) ${top}px, calc(100% - ${right}px + ${distance}px) ${top}px, calc(100% - ${right}px + ${distance}px) calc(100% - ${bottom}px + ${distance}px), calc(100% - ${right}px) calc(100% - ${bottom}px), ${left}px calc(100% - ${bottom}px))`,
+    display: "none",
+    "@media screen and (-webkit-min-device-pixel-ratio:0) and (min-resolution:.001dpcm)": {
+      display: "block"
+    }
   }
 });
 
@@ -121,10 +121,10 @@ export default function Header() {
       </Box>
       <Typography className={classes.icon} variant="h4" component="h1">
         🏭
-        <Box className={classes.clipInFront}>
+        <Box className={clsx(classes.clipInFront, "ff-hide")}>
           <Box className={classes.shadow1} />
         </Box>
-        <Box className={classes.clipBehind}>
+        <Box className={clsx(classes.clipBehind, "ff-hide")}>
           <Box className={classes.shadow2} />
         </Box>
       </Typography>

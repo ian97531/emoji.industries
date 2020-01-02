@@ -102,6 +102,11 @@ export default class MyApp extends App {
               border-radius: 9px;
               border: 4px solid var(--background);
             }
+            @-moz-document url-prefix() {
+              .ff-hide {
+                display: none;
+              }
+            }
           `}
         </style>
       </React.Fragment>
