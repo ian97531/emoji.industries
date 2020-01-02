@@ -195,12 +195,12 @@ export default function Selector(props: ComponentProps) {
       `translate3d(${selectLeft}px, ${selectTop}px, 50px) perspective(700px) rotateX(${selectXRotate}deg) rotateY(${selectYRotate}deg) scale(${scale})`
   );
 
-  const contentTransform = positionSpring.selectorTransform.interpolate(
+  const contentTransform = positionSpring.selectorTransform.to(
     (contentTop, contentLeft) =>
       `translate(${-contentLeft}px, ${-contentTop}px)`
   );
 
-  const shineTransform = rotationSpring.shineTransform.interpolate(
+  const shineTransform = rotationSpring.shineTransform.to(
     (xShine, yShine) =>
       `translate(${xShine - shineSize / 2}px, ${yShine - shineSize / 2}px)`
   );

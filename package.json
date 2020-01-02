@@ -26,13 +26,11 @@
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-ga": "^2.7.0",
-    "react-spring": "^9.0.0-beta.34",
-    "react-toast-notifications": "^2.4.0"
+    "react-spring": "^9.0.0-beta.34"
   },
   "devDependencies": {
     "@types/node": "^12.12.21",
     "@types/react": "^16.9.16",
-    "@types/react-toast-notifications": "^2.0.1",
     "typescript": "^3.7.3"
   }
 }

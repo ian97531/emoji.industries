@@ -2,8 +2,6 @@ import React from "react";
 import App from "next/app";
 import Head from "next/head";
 import Router from "next/router";
-import { ToastProvider } from "react-toast-notifications";
-import CssBaseline from "@material-ui/core/CssBaseline";
 
 import { initGA, logException, logPageView } from "../utils/analytics";
 
@@ -36,9 +34,7 @@ export default class MyApp extends App {
         <Head>
           <title>Emoji Industries</title>
         </Head>
-        <ToastProvider autoDismissTimeout={2000} placement="bottom-center">
-          <Component {...pageProps} />
-        </ToastProvider>
+        <Component {...pageProps} />
         <style jsx global>
           {`
             @media (prefers-color-scheme: dark) {
@@ -47,6 +43,7 @@ export default class MyApp extends App {
                 --text-primary-88: #d8d8d888;
                 --border-visible: #444444ff;
                 --border-transparent: #44444400;
+                --border-DD: #444444dd;
                 --shadow-transparent: #00000000;
                 --shadow-88: #00000066;
                 --shadow-66: #00000066;
@@ -59,6 +56,7 @@ export default class MyApp extends App {
                 --background-DD: #5a5656dd;
                 --background: #5a5656;
                 --selection: #606060;
+                --selection-DD: #606060dd;
                 --highlight-30: #ffffff18;
                 --highlight-10: #ffffff10;
               }
@@ -69,6 +67,7 @@ export default class MyApp extends App {
                 --text-primary-88: #5a565688;
                 --border-visible: #ddddddff;
                 --border-transparent: #dddddd00;
+                --border-DD: #dddddddd;
                 --shadow-transparent: #00000000;
                 --shadow-88: #00000088;
                 --shadow-66: #00000066;
@@ -81,6 +80,7 @@ export default class MyApp extends App {
                 --background-DD: #ffffffdd;
                 --background: #ffffff;
                 --selection: #efefef;
+                --selection-DD: #efefefdd;
                 --highlight-30: #ffffff50;
                 --highlight-10: #ffffff10;
               }

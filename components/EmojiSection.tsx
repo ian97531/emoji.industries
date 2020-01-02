@@ -5,8 +5,8 @@ import React, {
   useState,
   useMemo
 } from "react";
-import { useToasts } from "react-toast-notifications";
 import clsx from "clsx";
+import { useTransition, animated } from "react-spring";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
@@ -35,7 +35,6 @@ const useStyles = makeStyles({
     backgroundColor: "var(--background-DD)",
     backdropFilter: "blur(3px)",
     borderBottom: "1px solid var(--border-transparent)",
-    boxShadow: "0 0 0 var(--shadow-transparent)",
     marginTop: "30px",
     position: "sticky",
     top: "-1px",
@@ -92,13 +91,45 @@ const useStyles = makeStyles({
   },
   divider: {
     borderBottom: "1px solid var(--text-primary)"
+  },
+  toastList: {
+    bottom: 0,
+    left: 0,
+    position: "fixed",
+    margin: 0,
+    width: "100%",
+    pointerEvents: "none",
+    alignItems: "center",
+    display: "flex",
+    flexDirection: "column",
+    paddingBottom: "20px",
+    height: "50px",
+    zIndex: 90,
+    transformStyle: "preserve-3d",
+    transform: "translate3d(0, 0, 100px)"
+  },
+  toast: {
+    backgroundColor: "var(--selection-DD)",
+    backdropFilter: "blur(5px)",
+    borderBottom: "1px solid var(--border)",
+    boxShadow: "0 3px 10px var(--shadow-18)",
+    display: "block",
+    color: "var(--text-primary)",
+    fontFamily: "Lato",
+    fontWeight: 300,
+    fontSize: "18px",
+    padding: "10px",
+    paddingLeft: "25px",
+    paddingRight: "25px",
+    borderRadius: "30px",
+    marginBottom: "15px",
+    position: "absolute"
   }
 });
 
 export default function EmojiSection(props: ComponentProps) {
   const { category, emojis } = props;
   const classes = useStyles();
-  const { addToast, removeToast } = useToasts();
 
   const boxRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
@@ -118,6 +149,16 @@ export default function EmojiSection(props: ComponentProps) {
 
   const [boxWidth, setBoxWidth] = useState(0);
 
+  const [toast, setToast] = useState<ReadonlyArray<string>>([]);
+  const [toastTimer, setToastTimer] = useState<number | undefined>(undefined);
+
+  const transitions = useTransition(toast, emoji => emoji, {
+    from: { transform: "translate3d(0,100px,0) scale(0)" },
+    enter: { transform: "translate3d(0,0px,0) scale(1)" },
+    leave: { transform: "translate3d(0,100,0) scale(0)" },
+    config: { mass: 0.9, tension: 250, friction: 20 }
+  });
+
   const updateBoxWidth = useCallback(() => {
     if (boxRef.current instanceof HTMLDivElement) {
       const { width } = boxRef.current.getBoundingClientRect();
@@ -127,6 +168,17 @@ export default function EmojiSection(props: ComponentProps) {
     }
   }, [setBoxWidth]);
 
+  const displayToast = useCallback(
+    (emoji: string) => {
+      if (toastTimer !== undefined) {
+        clearTimeout(toastTimer);
+      }
+      setToast([emoji]);
+      setToastTimer(window.setTimeout(() => setToast([]), 2000));
+    },
+    [setToast, setToastTimer, toastTimer]
+  );
+
   const copyActiveEmojiToClipboard = useCallback(() => {
     const codepoints = activeEmojiCodepoints
       ?.split(",")
@@ -134,10 +186,7 @@ export default function EmojiSection(props: ComponentProps) {
     if (codepoints && codepoints.length) {
       const emoji = String.fromCodePoint(...codepoints);
       copyTextToClipboard(emoji);
-      // addToast(`${emoji} was copied to your clipboard`, {
-      //   appearance: "success",
-      //   autoDismiss: true
-      // });
+      displayToast(emoji);
     }
   }, [activeEmojiCodepoints, copyTextToClipboard]);
 
@@ -577,6 +626,18 @@ export default function EmojiSection(props: ComponentProps) {
         <Container maxWidth="md">
           <Box className={classes.divider}></Box>
         </Container>
+        <ul className={classes.toastList}>
+          {transitions.map(({ item, props, key }) => (
+            <animated.li
+              key={key}
+              style={props}
+              className={classes.toast}
+              role="alert"
+            >
+              {item} was copied to the clipboard
+            </animated.li>
+          ))}
+        </ul>
       </div>
     );
   }
