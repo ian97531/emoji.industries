@@ -16,6 +16,7 @@ const useStyles = makeStyles({
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
+    overflow: "hidden",
     paddingTop: "60px",
     "@media only screen and (max-device-width: 480px)": {
       paddingTop: "40px"
@@ -101,7 +102,10 @@ const useStyles = makeStyles({
     top: "0",
     "--webkit-clip-path": `polygon(${left}px ${top}px, ${left}px calc(100% - ${bottom}px), calc(100% - ${right}px) calc(100% - ${bottom}px), calc(100% - ${right}px) ${top}px, calc(100% - ${right}px + ${distance}px) ${top}px, calc(100% - ${right}px + ${distance}px) calc(100% - ${bottom}px + ${distance}px), calc(100% - ${right}px) calc(100% - ${bottom}px), ${left}px calc(100% - ${bottom}px))`,
     clipPath: `polygon(${left}px ${top}px, ${left}px calc(100% - ${bottom}px), calc(100% - ${right}px) calc(100% - ${bottom}px), calc(100% - ${right}px) ${top}px, calc(100% - ${right}px + ${distance}px) ${top}px, calc(100% - ${right}px + ${distance}px) calc(100% - ${bottom}px + ${distance}px), calc(100% - ${right}px) calc(100% - ${bottom}px), ${left}px calc(100% - ${bottom}px))`,
-    zIndex: -10
+    zIndex: -10,
+    "@media (max-device-width: 768px)": {
+      transform: "translateY(6px)"
+    }
   }
 });
 
