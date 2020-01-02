@@ -32,7 +32,7 @@ const useStyles = makeStyles({
     paddingBottom: "50px"
   },
   sticky: {
-    backgroundColor: "var(--background-DD)",
+    backgroundColor: "var(--background-transparent)",
     backdropFilter: "blur(3px)",
     borderBottom: "1px solid var(--border-transparent)",
 
@@ -50,6 +50,7 @@ const useStyles = makeStyles({
     }
   },
   stuck: {
+    backgroundColor: "var(--background-DD)",
     borderBottom: "1px solid var(--border-visible)",
     transform: "translateZ(200px)",
     zIndex: 100,
