@@ -87,6 +87,7 @@ const useStyles = makeStyles({
     top: "0",
     "--webkit-clip-path": `polygon(${left}px ${top}px, ${left}px calc(100% - ${bottom}px), calc(100% - ${right}px) calc(100% - ${bottom}px), calc(100% - ${right}px) ${top}px, calc(100% - ${right}px + ${distance}px) ${top}px, calc(100% - ${right}px + ${distance}px) calc(100% - ${bottom}px + ${distance}px), calc(${left}px - ${distance}px) calc(100% - ${bottom}px + ${distance}px), calc(${left}px - ${distance}px) ${top}px)`,
     clipPath: `polygon(${left}px ${top}px, ${left}px calc(100% - ${bottom}px), calc(100% - ${right}px) calc(100% - ${bottom}px), calc(100% - ${right}px) ${top}px, calc(100% - ${right}px + ${distance}px) ${top}px, calc(100% - ${right}px + ${distance}px) calc(100% - ${bottom}px + ${distance}px), calc(${left}px - ${distance}px) calc(100% - ${bottom}px + ${distance}px), calc(${left}px - ${distance}px) ${top}px)`,
+    zIndex: -10,
     display: "none",
     "@media screen and (-webkit-min-device-pixel-ratio:0) and (min-resolution:.001dpcm)": {
       display: "block"
@@ -100,10 +101,7 @@ const useStyles = makeStyles({
     top: "0",
     "--webkit-clip-path": `polygon(${left}px ${top}px, ${left}px calc(100% - ${bottom}px), calc(100% - ${right}px) calc(100% - ${bottom}px), calc(100% - ${right}px) ${top}px, calc(100% - ${right}px + ${distance}px) ${top}px, calc(100% - ${right}px + ${distance}px) calc(100% - ${bottom}px + ${distance}px), calc(100% - ${right}px) calc(100% - ${bottom}px), ${left}px calc(100% - ${bottom}px))`,
     clipPath: `polygon(${left}px ${top}px, ${left}px calc(100% - ${bottom}px), calc(100% - ${right}px) calc(100% - ${bottom}px), calc(100% - ${right}px) ${top}px, calc(100% - ${right}px + ${distance}px) ${top}px, calc(100% - ${right}px + ${distance}px) calc(100% - ${bottom}px + ${distance}px), calc(100% - ${right}px) calc(100% - ${bottom}px), ${left}px calc(100% - ${bottom}px))`,
-    display: "none",
-    "@media screen and (-webkit-min-device-pixel-ratio:0) and (min-resolution:.001dpcm)": {
-      display: "block"
-    }
+    zIndex: -10
   }
 });
 
@@ -119,12 +117,16 @@ export default function Header() {
           Industries
         </Typography>
       </Box>
-      <Typography className={classes.icon} variant="h4" component="h1">
+      <Typography
+        className={clsx(classes.icon, "ff-adjust-down")}
+        variant="h4"
+        component="h1"
+      >
         🏭
-        <Box className={clsx(classes.clipInFront, "ff-hide")}>
+        <Box className={clsx(classes.clipInFront, "ff-adjust-up")}>
           <Box className={classes.shadow1} />
         </Box>
-        <Box className={clsx(classes.clipBehind, "ff-hide")}>
+        <Box className={clsx(classes.clipBehind, "ff-adjust-up")}>
           <Box className={classes.shadow2} />
         </Box>
       </Typography>

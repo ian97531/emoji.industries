@@ -103,8 +103,11 @@ export default class MyApp extends App {
               border: 4px solid var(--background);
             }
             @-moz-document url-prefix() {
-              .ff-hide {
-                display: none;
+              .ff-adjust-up {
+                transform: translateY(-8px);
+              }
+              .ff-adjust-down {
+                transform: translateY(7px);
               }
             }
           `}
