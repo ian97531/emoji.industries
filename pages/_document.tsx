@@ -1,7 +1,6 @@
 import React from "react";
 import Document, { Head, Main, NextScript } from "next/document";
 import { ServerStyleSheets } from "@material-ui/core/styles";
-import theme from "../theme";
 
 export default class MyDocument extends Document {
   render() {
@@ -13,8 +12,6 @@ export default class MyDocument extends Document {
             name="viewport"
             content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no"
           />
-          {/* PWA primary color */}
-          <meta name="theme-color" content={theme.palette.primary.main} />
           <link
             href="https://fonts.googleapis.com/css?family=Lato:300i|Permanent+Marker&display=swap"
             rel="stylesheet"
@@ -94,7 +91,6 @@ export default class MyDocument extends Document {
             name="msapplication-TileImage"
             content="/favicon/ms-icon-144x144.png"
           />
-          <meta name="theme-color" content="#ffffff"></meta>
         </Head>
         <body>
           <Main />

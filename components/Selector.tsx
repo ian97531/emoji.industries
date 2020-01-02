@@ -22,9 +22,10 @@ interface ComponentProps {
 
 const useStyles = makeStyles({
   selection: {
-    background: "white",
+    background: "var(--selection)",
     borderRadius: "10px",
-    boxShadow: "inset 0 0px 0px 0px #00000000, 0px 0px 0px 0px #00000000",
+    boxShadow:
+      "inset 0 0px 0px 0px var(--shadow-transparent), 0px 0px 0px 0px var(--shadow-transparent)",
     cursor: "pointer",
     display: "block",
     overflow: "hidden",
@@ -36,10 +37,12 @@ const useStyles = makeStyles({
     zIndex: 10
   },
   active: {
-    boxShadow: "inset 0 0px 60px 10px #00000012, 0px 3px 10px 3px #00000008"
+    boxShadow:
+      "inset 0 0px 60px 10px var(--shadow-12), 0px 3px 10px 3px var(--shadow-08)"
   },
   clicked: {
-    boxShadow: "inset 0 0px 60px 10px #0000000B, 0px 0px 2px 0px #00000018"
+    boxShadow:
+      "inset 0 0px 60px 10px var(--shadow-0B), 0px 0px 2px 0px var(--shadow-18)"
   },
   content: {
     position: "absolute",
@@ -48,12 +51,16 @@ const useStyles = makeStyles({
     overflow: "visible"
   },
   shine: {
+    backgroundColor: "var(--highlight-30)",
     position: "absolute",
     borderRadius: "50%",
     width: "100%",
     height: "100%",
     filter: "blur(30px)",
-    transition: "background-color 0.1s ease-in-out"
+    transition: "background-color 0.1s ease-in-out",
+    "&.active": {
+      backgroundColor: "var(--highlight-10)"
+    }
   }
 });
 
@@ -135,8 +142,8 @@ export default function Selector(props: ComponentProps) {
 
         setYRotate(xRotation * rotationMultiplier);
         setXRotate(yRotation * rotationMultiplier * -1);
-        setXShine(mouseX);
-        setYShine(mouseY);
+        setXShine(width - mouseX);
+        setYShine(height - mouseY);
         setScale(1 + clamp(scaleAdd, 0, 1));
       }
     },
@@ -222,10 +229,9 @@ export default function Selector(props: ComponentProps) {
         {children}
       </animated.div>
       <animated.div
-        className={classes.shine}
+        className={clsx(classes.shine, selectionActive && "active")}
         style={{
-          transform: shineTransform,
-          backgroundColor: selectionActive ? "#FFFFFF10" : "#FFFFFF30"
+          transform: shineTransform
         }}
       />
     </animated.div>

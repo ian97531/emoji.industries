@@ -4,8 +4,6 @@ import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 
-import { fontColor } from "../constants";
-
 const left = 3.3;
 const right = 5.5;
 const bottom = 20;
@@ -26,12 +24,12 @@ const useStyles = makeStyles({
   typography: {
     fontFamily: "Permanent Marker",
     fontSize: "90px",
-    color: fontColor
+    color: "var(--text-primary)"
   },
   typography2: {
     fontFamily: "Permanent Marker",
     fontSize: "70px",
-    color: fontColor
+    color: "var(--text-primary)"
   },
   icon: {
     fontSize: "120px",
@@ -45,7 +43,7 @@ const useStyles = makeStyles({
     bottom: `${bottom}px`,
     height: "4px",
     position: "absolute",
-    boxShadow: "0 0 16px 2px #00000088, 0 0 5px #00000088",
+    boxShadow: "0 0 16px 2px var(--shadow-88), 0 0 5px var(--shadow-88)",
     transformStyle: "preserve-3d",
     borderRadius: "5px"
   },
@@ -56,7 +54,7 @@ const useStyles = makeStyles({
     bottom: `${bottom}px`,
     height: "20px",
     filter: "blur(5px)",
-    backgroundColor: "#00000066",
+    backgroundColor: "var(--shadow-66)",
     transform: "skewX(-40deg) translateX(10px) translateY(0px)"
   },
   clipInFront: {

@@ -10,23 +10,36 @@ import Header from "../components/Header";
 import categories from "../data/categories.json";
 import emojis from "../data/familiedEmoji.json";
 
-import { fontColor } from "../constants";
-
 import { IEmoji } from "../models/emoji/types";
 
 type IFilteredEmoji = { [key: string]: IEmoji };
 
 const useStyles = makeStyles({
   nav: {
-    borderBottom: `1px solid ${fontColor}`,
-    color: "#888",
+    borderBottom: "1px solid var(--text-primary)",
     height: "50px",
     marginTop: "45px",
     fontFamily: "Lato",
     fontWeight: 300,
     fontSize: "26px",
     paddingLeft: "4px",
-    lineHeight: "50px"
+    lineHeight: "50px",
+    display: "flex"
+  },
+  searchBox: {
+    marginLeft: "10px",
+    marginRight: "10px",
+    width: "100%"
+  },
+  searchInput: {
+    color: "var(--text-primary)",
+    fontStyle: "italic",
+    fontFamily: "Lato",
+    fontWeight: 300,
+    fontSize: "26px",
+    "&::placeholder": {
+      color: "var(--text-primary-88)"
+    }
   }
 });
 
@@ -60,7 +73,8 @@ export default function Index() {
             placeholder="Search for Emoji"
             type="search"
             disableUnderline
-            style={{ marginLeft: "10px" }}
+            className={classes.searchBox}
+            classes={{ input: classes.searchInput }}
             onChange={searchEmoji}
           />
         </Box>

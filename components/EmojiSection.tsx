@@ -15,8 +15,6 @@ import Box from "@material-ui/core/Box";
 import Emoji from "./Emoji";
 import Selector from "./Selector";
 
-import { fontColor } from "../constants";
-
 import { IEmoji } from "../models/emoji/types";
 
 import { copyTextToClipboard } from "../utils/clipboard";
@@ -34,10 +32,10 @@ const useStyles = makeStyles({
     paddingBottom: "50px"
   },
   sticky: {
-    backgroundColor: "#FFFFFFDD",
+    backgroundColor: "var(--background-DD)",
     backdropFilter: "blur(3px)",
-    borderBottom: "1px solid #0000",
-    boxShadow: "0 0 0 #0000",
+    borderBottom: "1px solid var(--border-transparent)",
+    boxShadow: "0 0 0 var(--shadow-transparent)",
     marginTop: "30px",
     position: "sticky",
     top: "-1px",
@@ -53,7 +51,7 @@ const useStyles = makeStyles({
     }
   },
   stuck: {
-    borderBottom: "1px solid #DDDF",
+    borderBottom: "1px solid var(--border-visible)",
     transform: "translateZ(200px)",
     zIndex: 100,
     "& .controls": {
@@ -71,9 +69,9 @@ const useStyles = makeStyles({
   sectionHeader: {
     fontFamily: "Lato",
     fontWeight: 300,
-    fontSize: "40px",
+    fontSize: "36px",
     fontStyle: "Italic",
-    color: fontColor,
+    color: "var(--text-primary)",
     paddingBottom: "10px"
   },
   industryIcon: {
@@ -93,7 +91,7 @@ const useStyles = makeStyles({
     position: "relative"
   },
   divider: {
-    borderBottom: `1px solid ${fontColor}`
+    borderBottom: "1px solid var(--text-primary)"
   }
 });
 
@@ -178,20 +176,45 @@ export default function EmojiSection(props: ComponentProps) {
     [removeSectionFocus, setFocusEmojiCodepoints]
   );
 
-  const focusPreviousEmoji = (currentElement: HTMLElement) => {
+  const focusPreviousEmoji = (
+    currentElement: HTMLElement,
+    firstInSection = false
+  ) => {
     const { previousElementSibling: prevSibling } = currentElement;
     if (prevSibling && prevSibling instanceof HTMLElement) {
-      prevSibling.focus();
-      return true;
-    } else {
-      const nextEls = Array.from(document.querySelectorAll('[tabindex="0"]'));
-      const currentIndex = nextEls.indexOf(currentElement);
-      if (currentIndex !== -1) {
-        const nextSelection =
-          nextEls[clamp(currentIndex - 1, 0, nextEls.length - 1)];
-        if (nextSelection instanceof HTMLElement) {
-          nextSelection.focus();
+      if (firstInSection) {
+        if (
+          currentElement.parentNode &&
+          currentElement.parentNode.firstChild instanceof HTMLElement
+        ) {
+          currentElement.parentNode.firstChild.focus();
           return true;
+        }
+      } else {
+        prevSibling.focus();
+        return true;
+      }
+    } else {
+      const prevEls = Array.from(
+        document.querySelectorAll('.emoji[tabindex="0"]')
+      );
+      const currentIndex = prevEls.indexOf(currentElement);
+      if (currentIndex !== -1) {
+        const prevSection =
+          prevEls[clamp(currentIndex - 1, 0, prevEls.length - 1)];
+        if (prevSection instanceof HTMLElement) {
+          if (firstInSection) {
+            if (
+              prevSection.parentNode &&
+              prevSection.parentNode.firstChild instanceof HTMLElement
+            ) {
+              prevSection.parentNode.firstChild.focus();
+              return true;
+            }
+          } else {
+            prevSection.focus();
+            return true;
+          }
         }
       }
     }
@@ -204,7 +227,9 @@ export default function EmojiSection(props: ComponentProps) {
       nextSibling.focus();
       return true;
     } else {
-      const nextEls = Array.from(document.querySelectorAll('[tabindex="0"]'));
+      const nextEls = Array.from(
+        document.querySelectorAll('.emoji[tabindex="0"]')
+      );
       const currentIndex = nextEls.indexOf(currentElement);
       if (currentIndex !== -1) {
         const nextSelection =
@@ -237,8 +262,16 @@ export default function EmojiSection(props: ComponentProps) {
             break;
           case "ArrowDown":
             setIsUsingMouse(false);
-
-            if (nextSibling) {
+            if (evt.shiftKey) {
+              const lastInSection = target.parentElement?.lastChild;
+              if (lastInSection && lastInSection instanceof HTMLElement) {
+                if (!focusNextEmoji(lastInSection)) {
+                  lastInSection.focus();
+                }
+                evt.preventDefault();
+                evt.stopPropagation();
+              }
+            } else if (nextSibling) {
               let nextTarget = nextSibling;
               while (
                 nextTarget &&
@@ -264,7 +297,20 @@ export default function EmojiSection(props: ComponentProps) {
             break;
           case "ArrowUp":
             setIsUsingMouse(false);
-            if (prevSibling) {
+            if (evt.shiftKey) {
+              const firstInSection = target.parentElement?.firstChild;
+              if (firstInSection && firstInSection instanceof HTMLElement) {
+                if (firstInSection === target) {
+                  if (!focusPreviousEmoji(firstInSection, true)) {
+                    firstInSection.focus();
+                  }
+                } else {
+                  firstInSection.focus();
+                }
+                evt.preventDefault();
+                evt.stopPropagation();
+              }
+            } else if (prevSibling) {
               let prevTarget = prevSibling;
               while (
                 prevTarget &&
@@ -396,14 +442,14 @@ export default function EmojiSection(props: ComponentProps) {
 
   const checkForStuckHeader = useCallback(
     ([entry]: ReadonlyArray<IntersectionObserverEntry>) => {
-      setIsHeaderStuck(!entry.isIntersecting);
+      setIsHeaderStuck(!entry.isIntersecting && entry.intersectionRatio > 0);
     },
     []
   );
 
   const setUsingMouse = useCallback(
     (evt: MouseEvent) => {
-      if (!isUsingMouse) {
+      if (!isUsingMouse && (evt.movementX || evt.movementY)) {
         setIsUsingMouse(true);
         if (
           evt.target instanceof HTMLElement &&
@@ -434,7 +480,7 @@ export default function EmojiSection(props: ComponentProps) {
       document.removeEventListener("mousemove", setUsingMouse);
       headerObserver.disconnect();
     };
-  }, []);
+  });
 
   const displayEmojiEls = useMemo(
     () =>
@@ -442,6 +488,7 @@ export default function EmojiSection(props: ComponentProps) {
         <Emoji
           category={emoji.category}
           codepoints={emoji.codepoints}
+          className="emoji"
           data-codepoints={emoji.codepoints}
           key={emoji.name}
           onKeyDown={onKeyDown}
