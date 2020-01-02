@@ -100,7 +100,7 @@ export default class MyApp extends App {
             body::-webkit-scrollbar-thumb {
               background-color: var(--shadow-88);
               border-radius: 9px;
-              border-left: 4px solid var(--background);
+              border: 4px solid var(--background);
             }
           `}
         </style>
