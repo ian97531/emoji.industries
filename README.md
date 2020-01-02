@@ -1,4 +1,4 @@
-# [https://emoji.industries](https://emoji.industries)
+# [Emoji Industries](https://emoji.industries)
 
 Emoji Industries is a website I made to make it easier to find and copy emojis after I got tired of squinting at the tiny emojis in the macOS emoji picker.
 
