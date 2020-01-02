@@ -532,7 +532,9 @@ export default function EmojiSection(props: ComponentProps) {
 
   const checkForStuckHeader = useCallback(
     ([entry]: ReadonlyArray<IntersectionObserverEntry>) => {
-      setIsHeaderStuck(!entry.isIntersecting && entry.intersectionRatio > 0);
+      setIsHeaderStuck(
+        entry.intersectionRatio < 1 && entry.intersectionRatio > 0
+      );
     },
     []
   );
