@@ -71,7 +71,7 @@ export default function Index() {
           🔎{" "}
           <Input
             id="standard-search"
-            placeholder="Search for Emoji"
+            placeholder="Search for Emoji to Copy"
             type="search"
             disableUnderline
             className={classes.searchBox}
