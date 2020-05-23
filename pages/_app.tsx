@@ -48,6 +48,8 @@ export default class MyApp extends App {
                 --shadow-88: #00000066;
                 --shadow-66: #00000066;
                 --shadow-55: #00000055;
+                --shadow-35: #00000035;
+                --shadow-25: #00000025;
                 --shadow-18: #00000018;
                 --shadow-12: #00000012;
                 --shadow-0B: #0000000b;
@@ -72,6 +74,8 @@ export default class MyApp extends App {
                 --shadow-88: #00000088;
                 --shadow-66: #00000066;
                 --shadow-55: #00000055;
+                --shadow-35: #00000035;
+                --shadow-25: #00000025;
                 --shadow-18: #00000018;
                 --shadow-12: #00000012;
                 --shadow-0B: #0000000b;

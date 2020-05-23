@@ -33,13 +33,15 @@ const useStyles = makeStyles({
   },
   sticky: {
     backgroundColor: "var(--background-transparent)",
-    backdropFilter: "blur(3px)",
+    backdropFilter: "blur(15px)",
     borderBottom: "1px solid var(--border-transparent)",
-
+    boxShadow: "0px 0px 0px var(--shadow-25)",
     position: "sticky",
     top: "-1px",
     transformStyle: "preserve-3d",
     transform: "translateZ(0px)",
+    transition:
+      "box-shadow 0.15s ease-in-out, border-bottom 0.15s ease-in-out, background-color 0.15s ease-in-out",
     width: "100%",
     zIndex: 1,
     "& .controls": {
@@ -50,8 +52,10 @@ const useStyles = makeStyles({
     },
   },
   stuck: {
-    backgroundColor: "var(--background-DD)",
+    backgroundColor: "var(--shadow-25)",
     borderBottom: "1px solid var(--border-visible)",
+    boxShadow: "0px 4px 8px var(--shadow-25)",
+
     transform: "translateZ(200px)",
     zIndex: 100,
     "& .controls": {
