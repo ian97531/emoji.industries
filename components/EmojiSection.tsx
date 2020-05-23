@@ -573,7 +573,7 @@ export default function EmojiSection(props: ComponentProps) {
       document.removeEventListener("mousemove", setUsingMouse);
       headerObserver.disconnect();
     };
-  }, []);
+  });
 
   const displayEmojiEls = useMemo(
     () =>
