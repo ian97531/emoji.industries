@@ -3,7 +3,7 @@ import React, {
   useEffect,
   useRef,
   useState,
-  useMemo
+  useMemo,
 } from "react";
 import clsx from "clsx";
 import { useTransition, animated } from "react-spring";
@@ -29,7 +29,7 @@ const useStyles = makeStyles({
   container: {
     display: "flex",
     flexDirection: "column",
-    paddingBottom: "50px"
+    paddingBottom: "50px",
   },
   sticky: {
     backgroundColor: "var(--background-transparent)",
@@ -46,8 +46,8 @@ const useStyles = makeStyles({
       opacity: 0,
       transition: "opacity 0.1s ease-in-out",
       fontStyle: "unset",
-      pointerEvents: "none"
-    }
+      pointerEvents: "none",
+    },
   },
   stuck: {
     backgroundColor: "var(--background-DD)",
@@ -56,15 +56,15 @@ const useStyles = makeStyles({
     zIndex: 100,
     "& .controls": {
       opacity: 1,
-      pointerEvents: "all"
-    }
+      pointerEvents: "all",
+    },
   },
   headerBorder: {
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
     paddingTop: "15px",
-    width: "100%"
+    width: "100%",
   },
   sectionHeader: {
     fontFamily: "Lato",
@@ -72,31 +72,31 @@ const useStyles = makeStyles({
     fontSize: "36px",
     fontStyle: "Italic",
     color: "var(--text-primary)",
-    paddingBottom: "10px"
+    paddingBottom: "10px",
   },
   industryIcon: {
     marginRight: "17px",
     paddingRight: "15px",
-    paddingLeft: "15px"
+    paddingLeft: "15px",
   },
   emojiBox: {
     marginLeft: "-27px",
     marginRight: "-28px",
     "@media only screen and (max-device-width: 768px)": {
       marginLeft: 0,
-      marginRight: 0
-    }
+      marginRight: 0,
+    },
   },
   display: {
     display: "flex",
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-between",
-    position: "relative"
+    position: "relative",
   },
   divider: {
     borderBottom: "1px solid var(--text-primary)",
-    marginBottom: "30px"
+    marginBottom: "30px",
   },
   toastList: {
     bottom: 0,
@@ -114,7 +114,7 @@ const useStyles = makeStyles({
     height: "50px",
     zIndex: 90,
     transformStyle: "preserve-3d",
-    transform: "translate3d(0, 0, 100px)"
+    transform: "translate3d(0, 0, 100px)",
   },
   toast: {
     alignItems: "center",
@@ -135,9 +135,9 @@ const useStyles = makeStyles({
       fontFamily: '"Lato", sans-serif',
       fontWeight: 300,
       fontSize: "18px",
-      marginLeft: "6px"
-    }
-  }
+      marginLeft: "6px",
+    },
+  },
 });
 
 export default function EmojiSection(props: ComponentProps) {
@@ -165,11 +165,11 @@ export default function EmojiSection(props: ComponentProps) {
   const [toast, setToast] = useState<ReadonlyArray<string>>([]);
   const [toastTimer, setToastTimer] = useState<number | undefined>(undefined);
 
-  const transitions = useTransition(toast, emoji => emoji, {
+  const transitions = useTransition(toast, {
     from: { transform: "translate3d(0,100px,0) scale(0)" },
     enter: { transform: "translate3d(0,0px,0) scale(1)" },
     leave: { transform: "translate3d(0,100,0) scale(0)" },
-    config: { mass: 0.9, tension: 250, friction: 20 }
+    config: { mass: 0.9, tension: 250, friction: 20 },
   });
 
   const updateBoxWidth = useCallback(() => {
@@ -195,7 +195,7 @@ export default function EmojiSection(props: ComponentProps) {
   const copyActiveEmojiToClipboard = useCallback(() => {
     const codepoints = activeEmojiCodepoints
       ?.split(",")
-      .map(codepoint => parseInt(codepoint, 10));
+      .map((codepoint) => parseInt(codepoint, 10));
     if (codepoints && codepoints.length) {
       const emoji = String.fromCodePoint(...codepoints);
       copyTextToClipboard(emoji);
@@ -219,7 +219,7 @@ export default function EmojiSection(props: ComponentProps) {
       setFocusEmojiHeight,
       setFocusEmojiLeft,
       setFocusEmojiTop,
-      setFocusEmojiCodepoints
+      setFocusEmojiCodepoints,
     ]
   );
 
@@ -313,7 +313,7 @@ export default function EmojiSection(props: ComponentProps) {
           nextElementSibling: nextSibling,
           offsetLeft: left,
           offsetTop: top,
-          previousElementSibling: prevSibling
+          previousElementSibling: prevSibling,
         } = target;
 
         switch (evt.key) {
@@ -492,7 +492,7 @@ export default function EmojiSection(props: ComponentProps) {
       activeEmojiCodepoints,
       setActiveEmojiCodepoints,
       setMouseDown,
-      copyActiveEmojiToClipboard
+      copyActiveEmojiToClipboard,
     ]
   );
 
@@ -521,7 +521,7 @@ export default function EmojiSection(props: ComponentProps) {
       activeEmojiCodepoints,
       setActiveEmojiCodepoints,
       setMouseDown,
-      copyActiveEmojiToClipboard
+      copyActiveEmojiToClipboard,
     ]
   );
 
@@ -561,7 +561,7 @@ export default function EmojiSection(props: ComponentProps) {
     document.addEventListener("mousemove", setUsingMouse);
     updateBoxWidth();
     const headerObserver = new IntersectionObserver(checkForStuckHeader, {
-      threshold: [1]
+      threshold: [1],
     });
     if (headerRef.current) {
       headerObserver.observe(headerRef.current);
@@ -573,11 +573,11 @@ export default function EmojiSection(props: ComponentProps) {
       document.removeEventListener("mousemove", setUsingMouse);
       headerObserver.disconnect();
     };
-  });
+  }, []);
 
   const displayEmojiEls = useMemo(
     () =>
-      emojis.map(emoji => (
+      emojis.map((emoji) => (
         <Emoji
           category={emoji.category}
           codepoints={emoji.codepoints}
@@ -605,12 +605,12 @@ export default function EmojiSection(props: ComponentProps) {
       onMouseDown,
       onMouseEnter,
       onMouseLeave,
-      setFocusEmoji
+      setFocusEmoji,
     ]
   );
 
   const selectionEmojiEls = useMemo(() => {
-    return emojis.map(emoji => (
+    return emojis.map((emoji) => (
       <Emoji
         category={emoji.category}
         codepoints={emoji.codepoints}
@@ -674,13 +674,8 @@ export default function EmojiSection(props: ComponentProps) {
           <Box className={classes.divider}></Box>
         </Container>
         <ul className={classes.toastList}>
-          {transitions.map(({ item, props, key }) => (
-            <animated.li
-              key={key}
-              style={props}
-              className={classes.toast}
-              role="alert"
-            >
+          {transitions((style, item) => (
+            <animated.li style={style} className={classes.toast} role="alert">
               {item} <span>was copied to your clipboard</span>
             </animated.li>
           ))}

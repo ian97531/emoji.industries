@@ -62,7 +62,7 @@ function Link(props: ComponentProps & { innerRef: InnerRefProp }) {
   const router = useRouter();
 
   const className = clsx(classNameProps, {
-    [activeClassName]: router.pathname === props.href && activeClassName
+    [activeClassName]: router.pathname === props.href && activeClassName,
   });
 
   // catch role passed from ButtonBase. This is definitely a link

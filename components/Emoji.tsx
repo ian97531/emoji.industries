@@ -28,7 +28,7 @@ const useStyles = makeStyles({
     userSelect: "none",
     outline: "none",
     "&::-moz-focus-inner": {
-      border: 0
+      border: 0,
     },
     "@media only screen and (max-device-width: 480px)": {
       fontSize: "80px",
@@ -37,7 +37,7 @@ const useStyles = makeStyles({
       paddingTop: 0,
       marginTop: `${padding}px`,
       height: `${mobileEmojiSize}px`,
-      width: `${mobileEmojiSize}px`
+      width: `${mobileEmojiSize}px`,
     },
     "@media only screen and (min-device-width: 481px) and (max-device-width: 768px)": {
       fontSize: "100px",
@@ -46,9 +46,9 @@ const useStyles = makeStyles({
       paddingTop: 0,
       marginTop: `${padding}px`,
       height: `${tabletEmojiSize}px`,
-      width: `${tabletEmojiSize}px`
-    }
-  }
+      width: `${tabletEmojiSize}px`,
+    },
+  },
 });
 
 export default function Emoji(props: ComponentProps) {

@@ -3,10 +3,10 @@ import React, {
   useEffect,
   useRef,
   useState,
-  ReactElement
+  ReactElement,
 } from "react";
 import clsx from "clsx";
-import { useSpring, animated, interpolate } from "react-spring";
+import { useSpring, animated, to } from "react-spring";
 import { makeStyles } from "@material-ui/core/styles";
 
 import { clamp } from "../utils/math";
@@ -36,22 +36,22 @@ const useStyles = makeStyles({
     transition: "box-shadow 0.05s ease-in-out",
     zIndex: 10,
     "@media (hover)": {
-      display: "block"
-    }
+      display: "block",
+    },
   },
   active: {
     boxShadow:
-      "inset 0 0px 60px 10px var(--shadow-12), 0px 3px 10px 3px var(--shadow-08)"
+      "inset 0 0px 60px 10px var(--shadow-12), 0px 3px 10px 3px var(--shadow-08)",
   },
   clicked: {
     boxShadow:
-      "inset 0 0px 60px 10px var(--shadow-0B), 0px 0px 2px 0px var(--shadow-18)"
+      "inset 0 0px 60px 10px var(--shadow-0B), 0px 0px 2px 0px var(--shadow-18)",
   },
   content: {
     position: "absolute",
     top: 0,
     left: 0,
-    overflow: "visible"
+    overflow: "visible",
   },
   shine: {
     backgroundColor: "var(--highlight-30)",
@@ -62,9 +62,9 @@ const useStyles = makeStyles({
     filter: "blur(30px)",
     transition: "background-color 0.1s ease-in-out",
     "&.active": {
-      backgroundColor: "var(--highlight-10)"
-    }
-  }
+      backgroundColor: "var(--highlight-10)",
+    },
+  },
 });
 
 const shineSize = 165;
@@ -89,7 +89,7 @@ export default function Selector(props: ComponentProps) {
       if (width && height && !isVisible) {
         setIsVisible(true);
       }
-    }
+    },
   });
 
   if ((!width || !height) && isVisible) {
@@ -98,7 +98,7 @@ export default function Selector(props: ComponentProps) {
 
   const sizeSpring = useSpring({
     to: { width, height },
-    config: { mass: 0.9, tension: 250, friction: 20 }
+    config: { mass: 0.9, tension: 250, friction: 20 },
   });
 
   const rotationSpring = useSpring({
@@ -106,10 +106,10 @@ export default function Selector(props: ComponentProps) {
       selectorTransform: selectionActive
         ? [0, 0, 1]
         : [xRotate, yRotate, scale],
-      shineTransform: [xShine, yShine]
+      shineTransform: [xShine, yShine],
     },
 
-    config: { mass: 0.2, tension: 800, friction: 30, clamp: true }
+    config: { mass: 0.2, tension: 800, friction: 30, clamp: true },
   });
 
   const setFlat = (scale = 1) => {
@@ -129,7 +129,7 @@ export default function Selector(props: ComponentProps) {
         const { clientX: mouseLeft, clientY: mouseTop } = evt;
         const {
           left: emojiLeft,
-          top: emojiTop
+          top: emojiTop,
         } = selectorRef.current.getBoundingClientRect();
         const mouseX = clamp(mouseLeft - emojiLeft, 0, width);
         const mouseY = clamp(mouseTop - emojiTop, 0, height);
@@ -163,7 +163,7 @@ export default function Selector(props: ComponentProps) {
           "ArrowLeft",
           "ArrowRight",
           "Enter",
-          " "
+          " ",
         ].indexOf(evt.key) !== -1
       ) {
         setFlat();
@@ -192,7 +192,7 @@ export default function Selector(props: ComponentProps) {
     };
   });
 
-  const selectorTransform = interpolate(
+  const selectorTransform = to(
     [positionSpring.selectorTransform, rotationSpring.selectorTransform],
     ([selectTop, selectLeft], [selectXRotate, selectYRotate, scale]) =>
       `translate3d(${selectLeft}px, ${selectTop}px, 50px) perspective(700px) rotateX(${selectXRotate}deg) rotateY(${selectYRotate}deg) scale(${scale})`
@@ -219,14 +219,14 @@ export default function Selector(props: ComponentProps) {
       ref={selectorRef}
       style={{
         transform: selectorTransform,
-        width: sizeSpring.width.interpolate(width => `${width}px`),
-        height: sizeSpring.height.interpolate(height => `${height}px`)
+        width: sizeSpring.width.to((width) => `${width}px`),
+        height: sizeSpring.height.to((height) => `${height}px`),
       }}
     >
       <animated.div
         className={classes.content}
         style={{
-          transform: contentTransform
+          transform: contentTransform,
         }}
       >
         {children}
@@ -234,7 +234,7 @@ export default function Selector(props: ComponentProps) {
       <animated.div
         className={clsx(classes.shine, selectionActive && "active")}
         style={{
-          transform: shineTransform
+          transform: shineTransform,
         }}
       />
     </animated.div>

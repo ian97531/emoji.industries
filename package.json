@@ -20,17 +20,17 @@
   },
   "homepage": "https://github.com/ian97531/emoji-industries#readme",
   "dependencies": {
-    "@material-ui/core": "^4.8.0",
-    "clsx": "^1.0.4",
-    "next": "^9.1.6",
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0",
+    "@material-ui/core": "^4.9.14",
+    "clsx": "^1.1.0",
+    "next": "^9.4.2",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
     "react-ga": "^2.7.0",
-    "react-spring": "^9.0.0-beta.34"
+    "react-spring": "^9.0.0-rc.1"
   },
   "devDependencies": {
-    "@types/node": "^12.12.21",
-    "@types/react": "^16.9.16",
-    "typescript": "^3.7.3"
+    "@types/node": "^14.0.5",
+    "@types/react": "^16.9.35",
+    "typescript": "^3.9.3"
   }
 }

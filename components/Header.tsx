@@ -19,37 +19,37 @@ const useStyles = makeStyles({
     overflow: "hidden",
     paddingTop: "60px",
     "@media only screen and (max-device-width: 480px)": {
-      paddingTop: "40px"
+      paddingTop: "40px",
     },
     "@media only screen and (min-device-width: 481px) and (max-device-width: 768px)": {
-      paddingTop: "50px"
-    }
+      paddingTop: "50px",
+    },
   },
   box: {
     display: "flex",
-    flexDirection: "column"
+    flexDirection: "column",
   },
   typography: {
     fontFamily: "Permanent Marker",
     fontSize: "90px",
     color: "var(--text-primary)",
     "@media only screen and (max-device-width: 480px)": {
-      fontSize: "60px"
+      fontSize: "60px",
     },
     "@media only screen and (min-device-width: 481px) and (max-device-width: 768px)": {
-      fontSize: "75px"
-    }
+      fontSize: "75px",
+    },
   },
   typography2: {
     fontFamily: "Permanent Marker",
     fontSize: "70px",
     color: "var(--text-primary)",
     "@media only screen and (max-device-width: 480px)": {
-      fontSize: "40px"
+      fontSize: "40px",
     },
     "@media only screen and (min-device-width: 481px) and (max-device-width: 768px)": {
-      fontSize: "55px"
-    }
+      fontSize: "55px",
+    },
   },
   icon: {
     fontSize: "120px",
@@ -57,8 +57,8 @@ const useStyles = makeStyles({
     marginBottom: "-0.065em",
     position: "relative",
     "@media only screen and (max-device-width: 480px)": {
-      fontSize: "80px"
-    }
+      fontSize: "80px",
+    },
   },
   shadow1: {
     left: `${left}px`,
@@ -68,7 +68,7 @@ const useStyles = makeStyles({
     position: "absolute",
     boxShadow: "0 0 16px 2px var(--shadow-88), 0 0 5px var(--shadow-88)",
     transformStyle: "preserve-3d",
-    borderRadius: "5px"
+    borderRadius: "5px",
   },
   shadow2: {
     position: "absolute",
@@ -78,7 +78,7 @@ const useStyles = makeStyles({
     height: "20px",
     filter: "blur(5px)",
     backgroundColor: "var(--shadow-66)",
-    transform: "skewX(-40deg) translateX(10px) translateY(0px)"
+    transform: "skewX(-40deg) translateX(10px) translateY(0px)",
   },
   clipInFront: {
     position: "absolute",
@@ -91,8 +91,8 @@ const useStyles = makeStyles({
     zIndex: -10,
     display: "none",
     "@media screen and (-webkit-min-device-pixel-ratio:0) and (min-resolution:.001dpcm)": {
-      display: "block"
-    }
+      display: "block",
+    },
   },
   clipBehind: {
     position: "absolute",
@@ -104,9 +104,9 @@ const useStyles = makeStyles({
     clipPath: `polygon(${left}px ${top}px, ${left}px calc(100% - ${bottom}px), calc(100% - ${right}px) calc(100% - ${bottom}px), calc(100% - ${right}px) ${top}px, calc(100% - ${right}px + ${distance}px) ${top}px, calc(100% - ${right}px + ${distance}px) calc(100% - ${bottom}px + ${distance}px), calc(100% - ${right}px) calc(100% - ${bottom}px), ${left}px calc(100% - ${bottom}px))`,
     zIndex: -10,
     "@media (max-device-width: 768px)": {
-      transform: "translateY(6px)"
-    }
-  }
+      transform: "translateY(6px)",
+    },
+  },
 });
 
 export default function Header() {
