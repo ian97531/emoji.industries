@@ -5,11 +5,17 @@ import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 
+import { OS } from "../models/types";
+
 const left = 3.3;
 const right = 5.5;
 const bottom = 20;
 const top = 0;
 const distance = 500;
+
+type ComponentProps = {
+  os: OS;
+};
 
 const useStyles = makeStyles({
   container: {
@@ -109,8 +115,19 @@ const useStyles = makeStyles({
   },
 });
 
-export default function Header() {
+export default function Header({ os }: ComponentProps) {
   const classes = useStyles();
+  const iconBackground =
+    os === "mac" ? (
+      <>
+        <Box className={clsx(classes.clipInFront, "ff-adjust-up")}>
+          <Box className={classes.shadow1} />
+        </Box>
+        <Box className={clsx(classes.clipBehind, "ff-adjust-up")}>
+          <Box className={classes.shadow2} />
+        </Box>
+      </>
+    ) : null;
   return (
     <Container maxWidth="md" className={classes.container} id="top">
       <Box className={classes.box} component="header">
@@ -127,12 +144,7 @@ export default function Header() {
         component="h1"
       >
         🏭
-        <Box className={clsx(classes.clipInFront, "ff-adjust-up")}>
-          <Box className={classes.shadow1} />
-        </Box>
-        <Box className={clsx(classes.clipBehind, "ff-adjust-up")}>
-          <Box className={classes.shadow2} />
-        </Box>
+        {iconBackground}
       </Typography>
     </Container>
   );

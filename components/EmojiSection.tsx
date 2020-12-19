@@ -15,6 +15,7 @@ import Box from "@material-ui/core/Box";
 import Emoji from "./Emoji";
 import Selector from "./Selector";
 
+import { OS } from "../models/types";
 import { IEmoji } from "../models/emoji/types";
 
 import { copyTextToClipboard } from "../utils/clipboard";
@@ -23,6 +24,7 @@ import { clamp } from "../utils/math";
 interface ComponentProps {
   category: string;
   emojis: ReadonlyArray<IEmoji>;
+  os: OS;
 }
 
 const useStyles = makeStyles({
@@ -145,7 +147,7 @@ const useStyles = makeStyles({
 });
 
 export default function EmojiSection(props: ComponentProps) {
-  const { category, emojis } = props;
+  const { category, emojis, os } = props;
   const classes = useStyles();
 
   const boxRef = useRef<HTMLDivElement>(null);
@@ -598,6 +600,7 @@ export default function EmojiSection(props: ComponentProps) {
           onTouchEnd={onTouchEnd}
           onFocus={setFocusEmoji}
           onBlur={blurEmoji}
+          os={os}
           tabIndex={0}
           title={emoji.name}
         />
@@ -619,6 +622,7 @@ export default function EmojiSection(props: ComponentProps) {
         category={emoji.category}
         codepoints={emoji.codepoints}
         key={emoji.name}
+        os={os}
         tabIndex={-1}
         title={emoji.name}
       />

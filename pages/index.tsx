@@ -14,6 +14,7 @@ import categoriesMac from "../data/categories-mac.json";
 import categoriesDefault from "../data/categories.json";
 import emojis from "../data/familiedEmoji.json";
 
+import { OS } from "../models/types";
 import { IEmoji } from "../models/emoji/types";
 
 type IFilteredEmoji = { [key: string]: IEmoji };
@@ -21,6 +22,7 @@ type ICategories = { [key: string]: ReadonlyArray<string> };
 
 type ComponentProps = {
   categories: ICategories;
+  os: OS;
 };
 
 const useStyles = makeStyles({
@@ -53,7 +55,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function Index({ categories }: ComponentProps) {
+export default function Index({ categories, os }: ComponentProps) {
   const classes = useStyles();
 
   const [filteredEmoji, setFilteredEmoji] = useState<IFilteredEmoji>(emojis);
@@ -74,7 +76,7 @@ export default function Index({ categories }: ComponentProps) {
 
   return (
     <React.Fragment>
-      <Header></Header>
+      <Header os={os}></Header>
       <Container maxWidth="md">
         <Box className={classes.nav}>
           🔎{" "}
@@ -96,6 +98,7 @@ export default function Index({ categories }: ComponentProps) {
             .map((id) => filteredEmoji[id])
             .filter((emoji) => emoji && emoji.name === emoji.familyName)}
           key={name}
+          os={os}
         />
       ))}
     </React.Fragment>
@@ -108,12 +111,12 @@ export const getServerSideProps: GetServerSideProps<ComponentProps> = async (
   const ua = context.req.headers["user-agent"];
   if (ua) {
     const os = Bowser.getParser(ua).getOSName(true);
-    console.log(os);
 
     if (os === "macos") {
       return {
         props: {
           categories: categoriesMac,
+          os: "mac",
         },
       };
     }
@@ -122,6 +125,7 @@ export const getServerSideProps: GetServerSideProps<ComponentProps> = async (
       return {
         props: {
           categories: categoriesWindows,
+          os: "windows",
         },
       };
     }
@@ -129,6 +133,7 @@ export const getServerSideProps: GetServerSideProps<ComponentProps> = async (
   return {
     props: {
       categories: categoriesDefault,
+      os: "default",
     },
   };
 };
