@@ -93,7 +93,8 @@ const useStyles = makeStyles({
   },
   display: {
     display: "flex",
-    flexDirection: "column",
+    flexDirection: "row",
+    flexWrap: "wrap",
     justifyContent: "space-between",
     position: "relative",
   },
@@ -196,17 +197,14 @@ export default function EmojiSection(props: ComponentProps) {
   );
 
   const copyActiveEmojiToClipboard = useCallback(() => {
-    // const codepoints = activeEmojiCodepoints
-    //   ?.split(",")
-    //   .map((codepoint) => parseInt(codepoint, 10));
-    // if (codepoints && codepoints.length) {
-    //   const emoji = String.fromCodePoint(...codepoints);
-    //   copyTextToClipboard(emoji);
-    //   displayToast(emoji);
-    // }
-
-    copyTextToClipboard(`"${activeEmojiCodepoints}",`);
-    displayToast(activeEmojiCodepoints);
+    const codepoints = activeEmojiCodepoints
+      ?.split(",")
+      .map((codepoint) => parseInt(codepoint, 10));
+    if (codepoints && codepoints.length) {
+      const emoji = String.fromCodePoint(...codepoints);
+      copyTextToClipboard(emoji);
+      displayToast(emoji);
+    }
   }, [activeEmojiCodepoints, copyTextToClipboard]);
 
   const setFocusEmoji = useCallback(
@@ -588,7 +586,7 @@ export default function EmojiSection(props: ComponentProps) {
           category={emoji.category}
           codepoints={emoji.codepoints}
           className="emoji"
-          data-codepoints={emoji.familyMembers[0]}
+          data-codepoints={emoji.codepoints}
           key={emoji.name}
           onKeyDown={onKeyDown}
           onKeyUp={onKeyUp}
