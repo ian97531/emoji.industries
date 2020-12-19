@@ -1,4 +1,6 @@
 import React, { useCallback, useState } from "react";
+import { GetServerSideProps } from "next";
+import Bowser from "bowser";
 import { makeStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
 import Container from "@material-ui/core/Container";
@@ -7,12 +9,19 @@ import Input from "@material-ui/core/Input";
 import EmojiSection from "../components/EmojiSection";
 import Header from "../components/Header";
 
-import categories from "../data/categories.json";
+import categoriesWindows from "../data/categories-win.json";
+import categoriesMac from "../data/categories-mac.json";
+import categoriesDefault from "../data/categories.json";
 import emojis from "../data/familiedEmoji.json";
 
 import { IEmoji } from "../models/emoji/types";
 
 type IFilteredEmoji = { [key: string]: IEmoji };
+type ICategories = { [key: string]: ReadonlyArray<string> };
+
+type ComponentProps = {
+  categories: ICategories;
+};
 
 const useStyles = makeStyles({
   nav: {
@@ -25,12 +34,12 @@ const useStyles = makeStyles({
     fontSize: "26px",
     paddingLeft: "4px",
     lineHeight: "50px",
-    display: "flex"
+    display: "flex",
   },
   searchBox: {
     marginLeft: "10px",
     marginRight: "10px",
-    width: "100%"
+    width: "100%",
   },
   searchInput: {
     color: "var(--text-primary)",
@@ -39,12 +48,12 @@ const useStyles = makeStyles({
     fontWeight: 300,
     fontSize: "26px",
     "&::placeholder": {
-      color: "var(--text-primary-88)"
-    }
-  }
+      color: "var(--text-primary-88)",
+    },
+  },
 });
 
-export default function Index() {
+export default function Index({ categories }: ComponentProps) {
   const classes = useStyles();
 
   const [filteredEmoji, setFilteredEmoji] = useState<IFilteredEmoji>(emojis);
@@ -84,11 +93,42 @@ export default function Index() {
         <EmojiSection
           category={name}
           emojis={ids
-            .map(id => filteredEmoji[id])
-            .filter(emoji => emoji && emoji.name === emoji.familyName)}
+            .map((id) => filteredEmoji[id])
+            .filter((emoji) => emoji && emoji.name === emoji.familyName)}
           key={name}
         />
       ))}
     </React.Fragment>
   );
 }
+
+export const getServerSideProps: GetServerSideProps<ComponentProps> = async (
+  context
+) => {
+  const ua = context.req.headers["user-agent"];
+  if (ua) {
+    const os = Bowser.getParser(ua).getOSName(true);
+    console.log(os);
+
+    if (os === "macos") {
+      return {
+        props: {
+          categories: categoriesMac,
+        },
+      };
+    }
+
+    if (os === "windows") {
+      return {
+        props: {
+          categories: categoriesWindows,
+        },
+      };
+    }
+  }
+  return {
+    props: {
+      categories: categoriesDefault,
+    },
+  };
+};
